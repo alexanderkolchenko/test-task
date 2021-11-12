@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<header th:insert="blocks/header::header"></header>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:insert="blocks/navbar::navbar"></div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 th:text="${title}" class="h2"/>
+            </div>
+            <form class="needs-validation" action="/customers/add" method="post" novalidate="">
+                <div class="row g-3">
+                    <div class="col-sm-3">
+                        <label for="surname" class="form-label">Фамилия</label>
+                        <input type="text" class="form-control" name="surname" id="surname" placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                            Valid first name is required.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="name" class="form-label">Имя</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                            Valid last name is required.
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="patronymic" class="form-label">Отчество</label>
+                        <input type="text" class="form-control" name="patronymic" id="patronymic" placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                            Valid last name is required.
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <label for="phoneNumber" class="form-label">Телефон</label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="phoneNumber" required="">
+                            <div class="invalid-feedback">
+                                Your username is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-5">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="you@example.com">
+                        <div class="invalid-feedback">
+                            Please enter a valid email address for shipping updates.
+                        </div>
+                    </div>
+
+                    <div class="col-9">
+                        <label for="passportNumber" class="form-label">Номер паспорта</label>
+                        <input type="text" class="form-control" name="passportNumber" id="passportNumber" placeholder="" required="">
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-success" type="submit">Добавить клиента</button>
+            </form>
+        </main>
+    </div>
+</div>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
