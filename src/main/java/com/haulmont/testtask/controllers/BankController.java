@@ -77,6 +77,7 @@ public class BankController {
             creditPayments.put(co, creditPayment);
         }
 
+
         model.addAttribute("credits", credits);
         model.addAttribute("bank", bank);
         model.addAttribute("customers", customers);

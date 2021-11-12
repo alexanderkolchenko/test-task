@@ -58,6 +58,8 @@
                     <br>
                 </div>
             </div>
+            
+
             <div class="row g-3">
                 <div class="col-sm-9">
                     <p class="mb-1 fw-bolder">Список клинтов банка</p>
@@ -76,7 +78,7 @@
                             <tr th:each="co:${creditOffers}">
                                 <td th:text="${creditOffers.indexOf(co)} + 1"/>
                                 <td th:text="${co.getCustomer().toString()}"/>
-                                <td class="text-end" th:text="${co.creditAmount} + ${creditPayments.size()}"/>
+                                <td class="text-end" th:text="${co.creditAmount}"/>
                                 <td class="text-end" th:text="${co.getCredit().interestRate}"/>
                                 <td class="text-end">
                                     <!--<form th:action="'/banks_details/' + ${co.id} +'/'+ ${bank.id}">-->
@@ -102,8 +104,8 @@
                         <th>Начисленные %, руб.</th>
                     </tr>
                     </thead>
-                    <tbody class="printSchedule" th:each="cp:${creditPayments}" th:id="a" >
-                    <tr th:each="c:${cp.getValue()}">
+                    <tbody class="printSchedule" th:each="cp:${creditPayments}">
+                    <tr th:each="c:${cp.getValue()}" >
                         <td th:text="${c.dateOfPayment}"></td>
                         <td th:text="${c.paymentOfMonth}"></td>
                         <td th:text="${c.payLoanBodyInMonth}"></td>

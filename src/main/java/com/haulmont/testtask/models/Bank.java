@@ -28,6 +28,7 @@ public class Bank {
     public Bank() {
     }
 
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bank_id", referencedColumnName = "id")
     List<CreditOffer> creditOffers = new ArrayList<>();
