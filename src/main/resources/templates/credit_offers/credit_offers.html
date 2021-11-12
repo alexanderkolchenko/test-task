@@ -182,7 +182,7 @@
        //$('#amountOfCredit').val('');
         var v = $(this).siblings().text().split(' руб., ');
         $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
-        $('#amountOfCredit').val(v[0]);
+        $('#amountOfCredit').val(v[0]); 
         $('#interestRateField').attr({"value": v[1].slice(0,-1)});
         console.log( $('#interestRateField').val())
         console.log(v)
