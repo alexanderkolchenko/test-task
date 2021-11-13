@@ -46,7 +46,8 @@
                                 <h2 class="accordion-header" th:id="${bank.id}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             th:data-bs-target="'#i' + ${banks.indexOf(bank)}" aria-expanded="false"
-                                            th:aria-controls="'i' + ${banks.indexOf(bank)}" th:text="${bank.nameOfBank}">
+                                            th:aria-controls="'i' + ${banks.indexOf(bank)}"
+                                            th:text="${bank.nameOfBank}">
                                     </button>
                                 </h2>
                                 <div th:id="'i' + ${banks.indexOf(bank)}" class="accordion-collapse collapse"
@@ -56,7 +57,8 @@
                                         <p class="fw-bolder">Список доступных кредитов</p>
                                         <div class="form-check" th:each="credit:${bank.getListOfCredits()}">
 
-                                            <input class="form-check-input checkCredit" type="radio" name="loanSelection"
+                                            <input class="form-check-input checkCredit" type="radio"
+                                                   name="loanSelection"
                                                    th:id="${credit.id} +':'+ ${bank.id}"
                                                    th:value="${credit.id} +':'+ ${bank.id}">
                                             <label class="form-check-label" th:for="${credit.id} +':'+ ${bank.id}"
@@ -73,7 +75,8 @@
                         <p class="fw-bolder px-3">Выберите клиента</p>
                         <hr class="p-0 mb-2">
                         <div class="form-check" th:each="client:${clients}">
-                            <input class="form-check-input"  type="radio" name="chooseClient" checked th:value="${client.id}" th:id="${client.id}">
+                            <input class="form-check-input" type="radio" name="chooseClient" checked
+                                   th:value="${client.id}" th:id="${client.id}">
                             <label class="form-check-label" th:for="${client.id}" th:text="${client.toString()}">
                             </label>
                         </div>
@@ -85,8 +88,9 @@
                 <div class="row g-3">
                     <div class="col-sm-3">
                         <label for="amountOfCredit" class="form-label">Сумма кредита, руб.</label>
-                        <input type="number" class="form-control" step="50000" name="amountOfCredit" id="amountOfCredit" max="" min="0"
-                               placeholder="" value=""
+                        <input type="number" class="form-control" step="50000" name="amountOfCredit" id="amountOfCredit"
+                               max="" min="0"
+                               placeholder="Выберите кредит" value=""
                                required="">
                         <div class="invalid-feedback">
                             Valid first name is required.
@@ -95,13 +99,15 @@
                     <div class="col-sm-2">
                         <fieldset>
                             <label class="form-label">Процентная ставка, %</label>
-                            <input readonly="true" type="text" id="interestRateField" class="form-control" value="" name="interestRate" placeholder="">
+                            <input readonly="true" type="text" id="interestRateField" class="form-control" value=""
+                                   name="interestRate" placeholder="">
                         </fieldset>
                     </div>
 
                     <div class="col-sm-3">
                         <label class="form-label">Срок</label>
-                        <select id="numberOfMonth" name="numberOfMonth" class="form-select" aria-label="Default select example">
+                        <select id="numberOfMonth" name="numberOfMonth" class="form-select"
+                                aria-label="Default select example">
                             <option selected value="3">3 мес.</option>
                             <option value="6">6 мес.</option>
                             <option value="12">1 год</option>
@@ -115,7 +121,8 @@
 
                     <div class="col-sm-3">
                         <label for="datePicker" class="form-label">Дата выдачи</label>
-                        <input th:type="date" class="form-control" name="startDate" id="datepicker" value="" required="">
+                        <input th:type="date" class="form-control" name="startDate" id="datepicker" value=""
+                               required="">
                         <div class="invalid-feedback">
                             Please enter your shipping address.
                         </div>
@@ -179,12 +186,12 @@
 <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
 <script>
     $('input[type=radio][name=loanSelection]').change(function () {
-       //$('#amountOfCredit').val('');
+        //$('#amountOfCredit').val('');
         var v = $(this).siblings().text().split(' руб., ');
         $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
         $('#amountOfCredit').val(v[0]);
-        $('#interestRateField').attr({"value": v[1].slice(0,-1)});
-        console.log( $('#interestRateField').val())
+        $('#interestRateField').attr({"value": v[1].slice(0, -1)});
+        console.log($('#interestRateField').val())
         console.log(v)
     })
 
@@ -205,15 +212,18 @@
         $('#paymentSchedule').empty();
 
         let amountOfCredit = parseInt($('#amountOfCredit').val());
+        let amountOfCreditConst = amountOfCredit;
         let interestRate = parseFloat($('#interestRateField').val());
         let numberOfMonth = parseInt($('#numberOfMonth').val());
         let currentDate = new Date($('#datepicker').val());
+        let totalAmount = 0;
         let payPercentInMonth;
         let payLoanBodyInMonth;
         let paymentOfMonth;
         let percentOfMonth;
-        let totalAmount = 0;
-        let overpayment = 0;
+        let overpayment;
+
+
 
         if (!isNaN(amountOfCredit) && !isNaN(interestRate)) {
             percentOfMonth = parseFloat((interestRate / (100 * 12)).toFixed(6));
@@ -224,13 +234,20 @@
                 currentDate.setMonth(currentDate.getMonth() + 1);
                 $('#paymentSchedule').append('<tr><td>' + currentDate.toLocaleDateString() + '</td><td>' + paymentOfMonth + '</td><td>' + payLoanBodyInMonth + '</td><td>' + payPercentInMonth + '</td></tr>');
                 amountOfCredit -= payLoanBodyInMonth;
-                totalAmount += parseInt(paymentOfMonth);
-                overpayment += parseFloat(payPercentInMonth);
+                totalAmount += parseFloat(paymentOfMonth);
+                // overpayment += parseFloat(payPercentInMonth);
             }
+            overpayment = totalAmount - amountOfCreditConst;
 
-            $('#total').html(totalAmount + ' руб.');
+            $('#total').html(totalAmount.toFixed(2) + ' руб.');
             $('#overpayment').html(overpayment.toFixed(2) + ' руб.');
             $('.resultTable').removeClass("invisible");
+        }
+        else {
+            //TODO проверка на пустые полля
+            if(isNaN(amountOfCredit)) {
+
+            }
         }
     })
 

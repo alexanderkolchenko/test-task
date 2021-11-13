@@ -4,6 +4,7 @@ import com.haulmont.testtask.models.*;
 import com.haulmont.testtask.repository.BankRepository;
 import com.haulmont.testtask.repository.CreditPaymentRepository;
 import com.haulmont.testtask.repository.CreditRepository;
+import com.haulmont.testtask.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,9 @@ public class BankController {
 
     @Autowired
     CreditPaymentRepository creditPaymentRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
 
 
     @GetMapping("/")
@@ -62,7 +66,7 @@ public class BankController {
 
 
     @GetMapping("/banks/{id}")
-    public String editBank(@PathVariable(value = "id") UUID id, Model model) {
+    public String getBankDetails(@PathVariable(value = "id") UUID id, Model model) {
         if (!bankRepository.existsById(id)) {
             return "redirect:/";
         }
@@ -71,13 +75,18 @@ public class BankController {
         List<Customer> customers = new ArrayList<>(bank.getListOfCustomers());
         List<CreditOffer> creditOffers = new ArrayList<>(bank.getCreditOffers());
         Map<CreditOffer, List<CreditPayment>> creditPayments = new LinkedHashMap<>();
-        for (CreditOffer co : creditOffers){
+        for (CreditOffer co : creditOffers) {
             List<CreditPayment> creditPayment = co.getPaymentSchedule();
             Collections.sort(creditPayment, (a, b) -> a.getDateOfPayment().compareTo(b.getDateOfPayment()));
             creditPayments.put(co, creditPayment);
         }
 
+        List<Integer> index = new LinkedList<>();
 
+        for (int i = 0; i < creditPayments.size(); i++) {
+            index.add(i);
+        }
+        model.addAttribute("index", index);
         model.addAttribute("credits", credits);
         model.addAttribute("bank", bank);
         model.addAttribute("customers", customers);
@@ -87,21 +96,46 @@ public class BankController {
         return "banks/banks_details";
     }
 
-    @GetMapping("/banks_details/{id}/{bid}")
-    public String printPaymentSchedule(@PathVariable(value = "id") UUID id, @PathVariable(value = "bid") UUID bid, Model model) {
-        System.out.println(id + "\n\n\n");
+    @GetMapping("/banks_schedule/{id}/{co_id}/{customer_id}")
+    public String printPaymentSchedule(@PathVariable(value = "id") UUID id, @PathVariable(value = "co_id") UUID co_id,
+                                       @PathVariable(value = "customer_id") UUID customer_id, Model model) {
+        Bank bank = bankRepository.findById(id).orElse(new Bank());
+        List<Credit> credits = new ArrayList<>(bank.getListOfCredits());
+        List<Customer> customers = new ArrayList<>(bank.getListOfCustomers());
         List<CreditPayment> creditPayments = new ArrayList<>();
-        creditPaymentRepository.findCreditPaymentsBycci(id).forEach(creditPayments::add);
+        creditPaymentRepository.findCreditPaymentsBycci(co_id).forEach(creditPayments::add);
+        List<CreditOffer> creditOffers = new ArrayList<>(bank.getCreditOffers());
+        Customer customer = customerRepository.findById(customer_id).orElseThrow(() -> new NoSuchElementException());
         Collections.sort(creditPayments, (a, b) -> a.getDateOfPayment().compareTo(b.getDateOfPayment()));
+        model.addAttribute("credits", credits);
+        model.addAttribute("bank", bank);
+        model.addAttribute("customers", customers);
+        model.addAttribute("creditOffers", creditOffers);
         model.addAttribute("creditPayments", creditPayments);
-        System.out.println(bid);
-        System.out.println(creditPayments.size());
-        System.out.println(creditPayments.toString());
-        return "redirect:/banks/{bid}";
+        model.addAttribute("customer", customer);
+        //model.addAttribute("creditPayments", creditPayments);
+        model.addAttribute("title", bank.getNameOfBank());
+        //model.addAttribute("index", index);
+        System.out.println(customers);
+        return "banks/banks_schedule";
     }
 
 
     //отсюда
+
+
+    @GetMapping("/banks/edit/{id}")
+    public String editBank(@PathVariable(value = "id") UUID id, Model model) {
+        Bank bank = bankRepository.findById(id).orElse(new Bank());
+        List<Credit> creditsOfBank = new ArrayList<>(bank.getListOfCredits());
+        List<Credit> credits = new ArrayList<>();
+        creditRepository.findAll().forEach(credits::add);
+        model.addAttribute("credits", credits);
+        model.addAttribute("creditsOfBank", creditsOfBank);
+        model.addAttribute("bank", bank);
+        model.addAttribute("title", "Редактирование банка: " + bank.getNameOfBank());
+        return "banks/banks_edit";
+    }
 
 
     @PostMapping("/banks/{id}")

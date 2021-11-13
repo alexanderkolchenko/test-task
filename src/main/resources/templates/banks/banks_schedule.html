@@ -58,54 +58,6 @@
                     <br>
                 </div>
             </div>
-            <!-- <p class="mb-1 fw-bolder">Список клинтов банка</p>
-             <div class="table-responsive">
-                 <table class="table table-striped table-sm">
-                     <thead>
-                     <tr>
-                         <th class="col-sm-1">#</th>
-                         <th class="fw-normal">ФИО клиента</th>
-                         <th class="text-end fw-normal">Сумма кредита, руб</th>
-                         <th class="text-end fw-normal">Процентная ставка, %</th>
-                         <th class="col-sm-3"></th>
-                         <th></th>
-                     </tr>
-                     </thead>
-                     <tbody></tbody>
-                 </table>
-             </div>
-
-
-             <div class="row p-0 py-2">
-                 <span class="col-sm-1 text-start p-0">#</span>
-                 <span class="col-sm-4 text-start p-0">ФИО клиента</span>
-                 <span class="col-sm-3 text-start p-0">Сумма кредита, руб</span>
-                 <span class="col-sm-3 text-start p-0">Процентная ставка, %</span>
-
-             </div>
-             <div  th:each="co:${creditOffers}" class="accordion accordion-flush" id="accordionFlushExample">
-                 <div class="accordion-item">
-                     <h2 class="accordion-header" id="flush-headingOne">
-                         <button  class=" p-0 py-1 accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                 data-bs-target="#flush-collapseOne" aria-expanded="false"
-                                 aria-controls="flush-collapseOne">
-                                 <span class="col-sm-1 text-start" th:text="${creditOffers.indexOf(co)} + 1"/>
-                                 <span class="col-sm-4 text-start" th:text="${co.getCustomer().toString()}"/>
-                                 <span class="col-sm-3 text-start" th:text="${co.creditAmount}"/>
-                                 <span class="col-sm-3 text-start" th:text="${co.getCredit().interestRate}"/>
-                             </tr>
-                             </tbody>
-                         </button>
-                     </h2>
-                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                          data-bs-parent="#accordionFlushExample">
-                         <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                             demonstrate
-                             the <code>.accordion-flush</code> class. This is the first item's accordion body.
-                         </div>
-                     </div>
-                 </div>
-             </div>-->
             <div class="row g-3">
                 <div class="col-sm-12">
                     <p class="mb-1 fw-bolder">Список клинтов банка</p>
@@ -124,10 +76,10 @@
                             <tr th:each="co:${creditOffers}">
                                 <td th:text="${creditOffers.indexOf(co)} + 1"/>
                                 <td th:text="${co.getCustomer().toString()}"/>
-                                <td class="text-end" th:text="${co.creditAmount}"/>
+                                <td class="text-end" th:id="creditAmount + ${creditOffers.indexOf(co)}" th:text="${co.creditAmount}"/>
                                 <td class="text-end" th:text="${co.getCredit().interestRate}"/>
                                 <td class="text-end">
-                                    <form th:action="'/banks_schedule/' + ${bank.id} +'/' + ${co.id} +'/'+ ${co.getCustomer().getId()}">
+                                    <form th:action="'/banks_schedule/' + ${bank.id} +'/' + ${co.id} +'/' + ${co.getCustomer().getId()}">
                                         <button th:id="printSchedule+${creditOffers.indexOf(co)}"
                                                 class="btn btn-sm btn-outline-secondary paymentSchedule">График платежей
                                         </button>
@@ -140,24 +92,28 @@
                     <br>
                 </div>
             </div>
-            <div class="row col-sm-6 mx-1 invisible resultTable">
+            <div class="row mx-1 resultTable">
                 <table>
                     <thead>
                     <tr>
+                        <th>Клиент</th>
                         <th>Всего выплат:</th>
                         <th>Переплата:</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td id="total" class="col-2 fw-bolder fs-5"></td>
-                        <td id="overpayment" class="col-2 fw-bolder fs-5"></td>
+                        <td  class="col-4 fw-normal fs-5" th:text="${customer.toString()}"></td>
+                        <td id="total" class="col-3 fw-normal fs-5"></td>
+                        <td id="overpayment" class="col-3 fw-normal fs-5"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="invisible table-responsive resultTable">
-                <table class="table table-striped table-sm">
+            <br>
+
+            <div class="table-responsive resultTable">
+                <table class="table  table-striped table-sm">
                     <thead>
                     <tr>
                         <th>Дата платежа</th>
@@ -167,17 +123,20 @@
                     </tr>
                     </thead>
                     <div>
-                        <tbody class="bodies" th:each="cp:${creditPayments}"
-                               th:id="paymentSchedule + ${index.removeFirst()}">
-                        <tr th:each="c:${cp.getValue()}">
-                            <td th:text="${c.dateOfPayment}"></td>
-                            <td th:text="${c.paymentOfMonth}"></td>
-                            <td th:text="${c.payLoanBodyInMonth}"></td>
-                            <td th:text="${c.payPercentInMonth}"></td>
+                        <tbody class="bodies">
+                        <!--th:id="paymentSchedule + ${index.removeFirst()}"-->
+                        <tr th:each="cp:${creditPayments}">
+                            <td th:text="${cp.dateOfPayment}"></td>
+                            <td class="paymentOfMonth" th:text="${cp.paymentOfMonth}"></td>
+                            <td class="amountOfCredit" th:text="${cp.payLoanBodyInMonth}"></td>
+                            <td th:text="${cp.payPercentInMonth}"></td>
                         </tr>
                         </tbody>
                     </div>
                 </table>
+                <div class="invisible">
+                    laskfjl
+                </div>
             </div>
         </main>
     </div>
@@ -185,8 +144,20 @@
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
 <script>
+    $(document).ready(function () {
+        let totalAmount = 0;
+        let amountOfCredit = 0;
+        $(".paymentOfMonth").each(function () {
+            totalAmount += parseFloat($(this).html());
+        })
+        $(".amountOfCredit").each(function () {
+            amountOfCredit += parseFloat($(this).html());
+        })
+        $('#total').html(totalAmount.toFixed(2) + " руб.")
+        $('#overpayment').html((totalAmount-amountOfCredit).toFixed(2) + " руб.");
+    })
 
-
+    //todo вытащить сумму кредита
 </script>
 </body>
 </html>

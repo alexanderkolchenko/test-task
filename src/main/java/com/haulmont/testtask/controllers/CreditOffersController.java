@@ -72,7 +72,7 @@ public class CreditOffersController {
         float payLoanBodyInMonth;
         float paymentOfMonth;
         float percentOfMonth;
-        DecimalFormat decimalFormat = new DecimalFormat("0.##");
+      //  DecimalFormat decimalFormat = new DecimalFormat("0.##");
         String[] s = loanSelection.split(":");
         UUID idOfCustomer = UUID.fromString(chooseClient);
         UUID idOfCredit = UUID.fromString(s[0]);
@@ -82,14 +82,13 @@ public class CreditOffersController {
 
         percentOfMonth = interestRate / (100 * 12);
         percentOfMonth = withMathRound(percentOfMonth, 6);
-
         paymentOfMonth = (float) (amountOfCredit * (percentOfMonth / (1 - (Math.pow((percentOfMonth + 1), numberOfMonth * -1)))));
-        paymentOfMonth = withMathRound(paymentOfMonth, 2);
+        paymentOfMonth = withMathRound(paymentOfMonth, 3);
         for (int i = 0; i < numberOfMonth; i++) {
             payPercentInMonth = (amountOfCredit * percentOfMonth);
-            payPercentInMonth = withMathRound(payPercentInMonth, 2);
+            payPercentInMonth = withMathRound(payPercentInMonth, 3);
             payLoanBodyInMonth = (paymentOfMonth - payPercentInMonth);
-            payLoanBodyInMonth = withMathRound(payLoanBodyInMonth, 2);
+            payLoanBodyInMonth = withMathRound(payLoanBodyInMonth, 3);
             currentDate = currentDate.plusMonths(1);
             CreditPayment creditPayment = new CreditPayment(currentDate, paymentOfMonth, payPercentInMonth, payLoanBodyInMonth);
             paymentSchedule.add(creditPayment);
