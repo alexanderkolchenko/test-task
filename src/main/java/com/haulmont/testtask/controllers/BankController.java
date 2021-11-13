@@ -1,10 +1,7 @@
 package com.haulmont.testtask.controllers;
 
 import com.haulmont.testtask.models.*;
-import com.haulmont.testtask.repository.BankRepository;
-import com.haulmont.testtask.repository.CreditPaymentRepository;
-import com.haulmont.testtask.repository.CreditRepository;
-import com.haulmont.testtask.repository.CustomerRepository;
+import com.haulmont.testtask.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +23,9 @@ public class BankController {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    CreditOfferRepository creditOfferRepository;
 
 
     @GetMapping("/")
@@ -120,34 +120,66 @@ public class BankController {
         return "banks/banks_schedule";
     }
 
-
-    //отсюда
-
-
     @GetMapping("/banks/edit/{id}")
     public String editBank(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankRepository.findById(id).orElse(new Bank());
         List<Credit> creditsOfBank = new ArrayList<>(bank.getListOfCredits());
         List<Credit> credits = new ArrayList<>();
+        List<Customer> customers = new ArrayList<>(bank.getListOfCustomers());
+        List<CreditOffer> creditOffers = new ArrayList<>(bank.getCreditOffers());
         creditRepository.findAll().forEach(credits::add);
         model.addAttribute("credits", credits);
         model.addAttribute("creditsOfBank", creditsOfBank);
+        model.addAttribute("creditOffers", creditOffers);
         model.addAttribute("bank", bank);
+        model.addAttribute("customers", customers);
         model.addAttribute("title", "Редактирование банка: " + bank.getNameOfBank());
         return "banks/banks_edit";
     }
 
-
-    @PostMapping("/banks/{id}")
-    public String updateBank(@PathVariable(value = "id") UUID id, @RequestParam int bankLimit, @RequestParam double interestRate, Model model) {
-        Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
-        /*bank.setCreditLimit(bankLimit);
-        bank.setInterestRate(interestRate);*/
-
-        bankRepository.save(bank);
-        return "redirect:/";
+    //удаление выданного кредита
+    @PostMapping("/banks/edit/{id}/{bank_id}/remove_credit_offer")
+    public String deleteCreditOffer(@PathVariable(value = "id") UUID id, @PathVariable(value = "bank_id") UUID bank_id, Model model) {
+        CreditOffer creditOffer = creditOfferRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        creditOfferRepository.delete(creditOffer);
+        return editBank(bank_id, model);
     }
 
+
+    //редктирование банка
+    @PostMapping("/banks/edit/{id}")
+    public String editBank(@PathVariable(value = "id", required = false) UUID id,
+                           @RequestParam(required = false) String[] idOfCredit,
+                           @RequestParam String nameOfBank, Model model) {
+        Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        bank.setNameOfBank(nameOfBank);
+        List<Credit> listOfCreditsOfBank = new ArrayList<>(bank.getListOfCredits());
+        //List<Credit> listOfAllCredit = creditRepository.findAll();
+        List<Credit> newCredit = new ArrayList<>();
+
+        if (idOfCredit != null) {
+            for (String i : idOfCredit) {
+                UUID j = UUID.fromString(i);
+                Credit c = creditRepository.findById(j).orElseThrow(() -> new NoSuchElementException());
+                newCredit.add(c);
+                if (!listOfCreditsOfBank.contains(c)) {
+                    c.getBanks().add(bank);
+                    bank.getListOfCredits().add(c);
+                }
+            }
+        }
+        for(Credit c : listOfCreditsOfBank) {
+            if(!newCredit.contains(c)) {
+                c.getBanks().remove(bank);
+                bank.getListOfCredits().remove(c);
+            }
+        }
+
+        bankRepository.save(bank);
+        return editBank(id, model);
+    }
+
+    //отсюда
     @PostMapping("/banks/{id}/remove")
     public String deleteBank(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());

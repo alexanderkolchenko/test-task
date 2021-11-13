@@ -103,7 +103,7 @@ public class CreditOffersController {
 
         creditOfferRepository.save(creditOffer);
         System.out.println("norm");
-        return "redirect:/";
+        return "redirect:/creditOffers";
     }
 
 

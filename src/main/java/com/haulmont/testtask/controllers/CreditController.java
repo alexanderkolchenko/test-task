@@ -65,7 +65,7 @@ public class CreditController {
     }
 
     @PostMapping("/credits/{id}/remove")
-    public String deletecredit(@PathVariable(value = "id") UUID id, Model model) {
+    public String deleteСredit(@PathVariable(value = "id") UUID id, Model model) {
         Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         creditRepository.delete(credit);
         return "redirect:/credits";
