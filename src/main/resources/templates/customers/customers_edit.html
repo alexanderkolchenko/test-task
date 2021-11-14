@@ -31,61 +31,39 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 th:text="${title}" class="h2"/>
             </div>
-            <form class="needs-validation" method="post" novalidate="">
+            <form class="needs-validation" method="post">
                 <div class="row g-3">
                     <div class="col-sm-3">
                         <label for="surname" class="form-label">Фамилия</label>
                         <input type="text" class="form-control" th:value="${customer.surname}" name="surname"
-                               id="surname" placeholder="" value="" required="">
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
+                               id="surname" placeholder="" value="" required>
                     </div>
-
                     <div class="col-sm-3">
                         <label for="name" class="form-label">Имя</label>
                         <input type="text" class="form-control" name="name" th:value="${customer.name}" id="name"
-                               placeholder="" value="" required="">
-                        <div class="invalid-feedback">
-                            Valid last name is required.
-                        </div>
+                               placeholder="" value="" required=>
                     </div>
                     <div class="col-sm-3">
                         <label for="patronymic" class="form-label">Отчество</label>
                         <input type="text" class="form-control" th:value="${customer.patronymic}" name="patronymic"
-                               id="patronymic" placeholder="" value="" required="">
-                        <div class="invalid-feedback">
-                            Valid last name is required.
-                        </div>
+                               id="patronymic" placeholder="" value="" required>
                     </div>
-
                     <div class="col-4">
                         <label for="phoneNumber" class="form-label">Телефон</label>
                         <div class="input-group has-validation">
-                            <input type="text" class="form-control" th:value="${customer.phoneNumber}"
-                                   name="phoneNumber" id="phoneNumber" placeholder="" required="">
-                            <div class="invalid-feedback">
-                                Your username is required.
-                            </div>
+                            <input type="tel" class="form-control" th:value="${customer.phoneNumber}"
+                                   name="phoneNumber" id="phoneNumber" placeholder="" required>
                         </div>
                     </div>
-
                     <div class="col-5">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" name="email" th:value="${customer.email}" id="email"
-                               placeholder="">
-                        <div class="invalid-feedback">
-                            Please enter a valid email address for shipping updates.
-                        </div>
+                               placeholder="" required>
                     </div>
-
                     <div class="col-9">
                         <label for="passportNumber" class="form-label">Номер паспорта</label>
-                        <input type="text" class="form-control" name="passportNumber"
-                               th:value="${customer.passportNumber}" id="passportNumber" placeholder="" required="">
-                        <div class="invalid-feedback">
-                            Please enter your shipping address.
-                        </div>
+                        <input type="number" class="form-control" name="passportNumber"
+                               th:value="${customer.passportNumber}" id="passportNumber" placeholder="" required>
                     </div>
                 </div>
                 <br>

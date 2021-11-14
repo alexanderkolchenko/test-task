@@ -33,16 +33,13 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 th:text="${title}" class="h2"/>
             </div>
-            <form class="needs-validation" method="post" novalidate="">
+            <form class="needs-validation" method="post">
                 <div class="row g-3">
                     <div class="col-sm-3">
                         <label for="nameOfBank" class="form-label">Название</label>
                         <input th:value="${bank.nameOfBank}" type="text" class="form-control" name="nameOfBank"
                                id="nameOfBank" placeholder=""
-                               value="" required="">
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
+                               value="" required>
                     </div>
                 </div>
                 <hr>

@@ -36,21 +36,11 @@
                 <div class="row g-3">
                     <div class="col-sm-3">
                         <label for="creditLimit" class="form-label">Лимит по кредиту, руб</label>
-                        <input type="text" class="form-control" th:value="${credit.creditLimit}" name="creditLimit"
-                               id="creditLimit" placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
+                        <input type="number" min="0" step="10000" class="form-control" th:value="${credit.creditLimit}" name="creditLimit" id="creditLimit" placeholder="" value="" required>
                     </div>
-
                     <div class="col-sm-3">
                         <label for="interestRate" class="form-label">Процентная ставка, %</label>
-                        <input type="text" class="form-control" name="interestRate" th:value="${credit.interestRate}"
-                               id="interestRate"
-                               placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                            Valid last name is required.
-                        </div>
+                        <input type="number" step="0.01" min="0" class="form-control"  th:value="${credit.interestRate}" name="interestRate" id="interestRate" placeholder="" value="" required>
                     </div>
                 </div>
                 <br>

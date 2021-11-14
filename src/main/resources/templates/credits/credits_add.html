@@ -31,22 +31,15 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 th:text="${title}" class="h2"/>
             </div>
-            <form class="needs-validation" action="/credits/add" method="post" novalidate="">
+            <form class="needs-validation" action="/credits/add" method="post">
                 <div class="row g-3">
                     <div class="col-sm-3">
                         <label for="creditLimit" class="form-label">Лимит по кредиту, руб</label>
-                        <input type="text" class="form-control" name="creditLimit" id="creditLimit" placeholder="" value="" required="">
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
+                        <input type="number" min="0" step="10000" class="form-control" name="creditLimit" id="creditLimit" placeholder="" value="" required>
                     </div>
-
                     <div class="col-sm-3">
                         <label for="interestRate" class="form-label">Процентная ставка, %</label>
-                        <input type="text" class="form-control" name="interestRate" id="interestRate" placeholder="" value="" required="">
-                        <div class="invalid-feedback">
-                            Valid last name is required.
-                        </div>
+                        <input type="number" step="0.01" min="0" class="form-control" name="interestRate" id="interestRate" placeholder="" value="" required>
                     </div>
                 </div>
                 <br>
