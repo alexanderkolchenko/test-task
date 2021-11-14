@@ -1,12 +1,21 @@
 package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.*;
 
+/**
+ * Класс Банк, содержит список кредитов, список клиентов и
+ * список выданных кредитных предложений
+ *
+ * @author Alexander Kolchenko
+ * @version 1.01 14.11.2021
+ */
 @Entity
 @Table(name = "banks")
 public class Bank {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -15,11 +24,15 @@ public class Bank {
 
     private String nameOfBank;
 
-    @ManyToMany(fetch = FetchType.LAZY,/*, cascade = CascadeType.ALL,*/ mappedBy = "banks")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "listOfBanks")
     private Set<Credit> listOfCredits = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,/*, cascade = CascadeType.ALL,*/ mappedBy = "banks")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "listOfBanks")
     private Set<Customer> listOfCustomers = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bank_id", referencedColumnName = "id")
+    List<CreditOffer> listOfCreditOffers = new ArrayList<>();
 
     public Bank(String nameOfBank) {
         this.nameOfBank = nameOfBank;
@@ -28,20 +41,17 @@ public class Bank {
     public Bank() {
     }
 
+    /* Удаление кредита из списка кредитов банка при удалении объекта кредита из БД */
     public void deleteCreditFromBank(Credit credit) {
         this.listOfCredits.remove(credit);
         credit.getBanks().remove(this);
     }
 
+    /* Удаление клиента из списка клиетов банка при удалении объекта клиента из БД */
     public void deleteCustomerFromBank(Customer customer) {
         this.listOfCustomers.remove(customer);
         customer.getBanks().remove(this);
     }
-
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bank_id", referencedColumnName = "id")
-    List<CreditOffer> creditOffers = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -76,10 +86,10 @@ public class Bank {
     }
 
     public List<CreditOffer> getCreditOffers() {
-        return creditOffers;
+        return listOfCreditOffers;
     }
 
     public void setCreditOffers(List<CreditOffer> creditOffers) {
-        this.creditOffers = creditOffers;
+        this.listOfCreditOffers = creditOffers;
     }
 }

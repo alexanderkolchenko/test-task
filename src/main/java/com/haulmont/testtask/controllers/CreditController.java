@@ -2,7 +2,6 @@ package com.haulmont.testtask.controllers;
 
 import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.models.CreditOffer;
-import com.haulmont.testtask.models.Customer;
 import com.haulmont.testtask.repository.BankRepository;
 import com.haulmont.testtask.repository.CreditOfferRepository;
 import com.haulmont.testtask.repository.CreditPaymentRepository;
@@ -49,7 +48,9 @@ public class CreditController {
     }
     @PostMapping("/credits/add")
     //todo valid
-    public String addCreditSubmit(@RequestParam int creditLimit, @RequestParam double interestRate, Model model) {
+    public String addCreditSubmit(@RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
+        interestRate = CreditOffersController.withMathRound(interestRate, 2);
+        System.out.println(interestRate);
         Credit credit = new Credit(creditLimit, interestRate);
         creditRepository.save(credit);
         return "redirect:/credits";
@@ -69,7 +70,7 @@ public class CreditController {
     }
 
     @PostMapping("/credits/{id}")
-    public String updateCredit(@PathVariable(value = "id") UUID id, @RequestParam int creditLimit, @RequestParam double interestRate, Model model) {
+    public String updateCredit(@PathVariable(value = "id") UUID id, @RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
         Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         credit.setCreditLimit(creditLimit);
         credit.setInterestRate(interestRate);

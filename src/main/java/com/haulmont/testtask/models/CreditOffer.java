@@ -1,10 +1,18 @@
 package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Класс Кредитное предложение, содержит кредит, сумму кредита, клиента,
+ * выдавший его банк и график платежей
+ *
+ * @author Alexander Kolchenko
+ * @version 1.01 14.11.2021
+ */
 @Entity
 @Table(name = "creditoffers")
 public class CreditOffer {
@@ -14,23 +22,26 @@ public class CreditOffer {
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
 
+    private double creditAmount;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="credit_id")
+    @JoinColumn(name = "credit_id")
     private Credit credit;
 
-    @ManyToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
-    @JoinColumn(name ="bank_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id")
     private Bank bank;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "co_cp_id", referencedColumnName = "id")
     private List<CreditPayment> paymentSchedule;
 
-    private double creditAmount;
+    public CreditOffer() {
+    }
 
     public CreditOffer(Customer customer, Credit credit, Bank bank, List<CreditPayment> paymentSchedule, double creditAmount) {
         this.customer = customer;
@@ -38,9 +49,6 @@ public class CreditOffer {
         this.bank = bank;
         this.paymentSchedule = paymentSchedule;
         this.creditAmount = creditAmount;
-    }
-
-    public CreditOffer() {
     }
 
     public UUID getId() {

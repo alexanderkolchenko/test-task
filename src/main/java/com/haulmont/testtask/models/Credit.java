@@ -5,6 +5,14 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.*;
 
+/**
+ * Класс Кредит, содержит кредитный лимит, процентную ставку,
+ * спикок банков, в котором его можно оформить и список выданных
+ * кредитных предложений
+ *
+ * @author Alexander Kolchenko
+ * @version 1.01 14.11.2021
+ */
 @Entity
 @Table(name = "credits")
 public class Credit {
@@ -14,29 +22,34 @@ public class Credit {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
-    private int creditLimit;
-    private double interestRate;
 
-    @ManyToMany(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
+    private int creditLimit;
+
+    private float interestRate;
+
+    /* Список банков, в которых можно оформить кредит */
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "credit_banks",
             joinColumns = {@JoinColumn(name = "credit_id")},
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
-    private Set<Bank> banks = new HashSet<>();
+    private Set<Bank> listOfBanks = new HashSet<>();
 
-    @OneToMany(/*cascade = CascadeType.ALL*/)
+    /*Список выданных кредитных предложений по данному кредиту*/
+    @OneToMany
     @JoinColumn(name = "credit_id", referencedColumnName = "id")
-    List<CreditOffer> creditOffers = new ArrayList<>();
-
-    public Credit(int creditLimit, double interestRate) {
-        this.creditLimit = creditLimit;
-        this.interestRate = interestRate;
-    }
+    List<CreditOffer> listOfCreditOffers = new ArrayList<>();
 
     public Credit() {
     }
 
+    public Credit(int creditLimit, float interestRate) {
+        this.creditLimit = creditLimit;
+        this.interestRate = interestRate;
+    }
+
+    /* Удаление банка из списка банков при удалении объекта банка из БД */
     public void deleteBankFromCredit(Bank bank) {
-        this.banks.remove(bank);
+        this.listOfBanks.remove(bank);
         bank.getListOfCredits().remove(this);
     }
 
@@ -48,7 +61,7 @@ public class Credit {
         this.id = id;
     }
 
-    public int getCreditLimit() {
+    public float getCreditLimit() {
         return creditLimit;
     }
 
@@ -60,23 +73,23 @@ public class Credit {
         return interestRate;
     }
 
-    public void setInterestRate(double interestRate) {
+    public void setInterestRate(float interestRate) {
         this.interestRate = interestRate;
     }
 
     public Set<Bank> getBanks() {
-        return banks;
+        return listOfBanks;
     }
 
     public void setBanks(Set<Bank> banks) {
-        this.banks = banks;
+        this.listOfBanks = banks;
     }
 
     public List<CreditOffer> getCreditOffers() {
-        return creditOffers;
+        return listOfCreditOffers;
     }
 
     public void setCreditOffers(List<CreditOffer> creditOffers) {
-        this.creditOffers = creditOffers;
+        this.listOfCreditOffers = creditOffers;
     }
 }

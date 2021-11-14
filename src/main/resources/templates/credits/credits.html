@@ -57,6 +57,7 @@
                     <tr th:each="el:${credits}">
                         <td th:text="${credits.indexOf(el)} + 1"/>
                         <td th:text="${el.creditLimit}"/>
+                       <!-- <td th:text="${#numbers.formatDecimal(el.interestRate, 1, 2)}"/>-->
                         <td th:text="${el.interestRate}"/>
                         <td><a th:href="'/credits/' + ${el.id}"
                                class="btn btn-sm btn-outline-secondary">Редактировать</a></td>

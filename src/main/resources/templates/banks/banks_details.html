@@ -78,7 +78,7 @@
                                 <td th:text="${creditOffers.indexOf(co)} + 1"/>
                                 <td th:text="${co.getCustomer().toString()}"/>
                                 <td class="text-end" th:text="${co.creditAmount}"/>
-                                <td class="text-end" th:text="${co.getCredit().interestRate}"/>
+                                <td class="text-end" th:text="${#numbers.formatDecimal(co.getCredit().interestRate, 1, 2)}"/>
                                 <td class="text-end">
                                     <form th:action="'/banks_schedule/' + ${bank.id} +'/' + ${co.id} +'/'+ ${co.getCustomer().getId()}">
                                         <button th:id="printSchedule+${creditOffers.indexOf(co)}"
@@ -120,13 +120,12 @@
                     </tr>
                     </thead>
                     <div>
-                        <tbody class="bodies" th:each="cp:${creditPayments}"
-                               th:id="paymentSchedule + ${index.removeFirst()}">
+                        <tbody class="bodies" th:each="cp:${creditPayments}">
                         <tr th:each="c:${cp.getValue()}">
                             <td th:text="${c.dateOfPayment}"></td>
                             <td th:text="${c.paymentOfMonth}"></td>
-                            <td th:text="${c.payLoanBodyInMonth}"></td>
-                            <td th:text="${c.payPercentInMonth}"></td>
+                            <td th:text="${c.paymentOfLoanBodyInMonth}"></td>
+                            <td th:text="${c.paymentOfPercentInMonth}"></td>
                         </tr>
                         </tbody>
                     </div>
@@ -138,14 +137,11 @@
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
 <script>
-
     if ($("#tableOfCustomers tr").length == 0) {
         $(".listOfCustomers").addClass("invisible");
     } else {
         $("#nullCostumers").addClass("invisible");
     }
-
-
 </script>
 </body>
 </html>

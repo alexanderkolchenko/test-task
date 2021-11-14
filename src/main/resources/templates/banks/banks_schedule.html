@@ -128,8 +128,8 @@
                         <tr th:each="cp:${creditPayments}">
                             <td th:text="${cp.dateOfPayment}"></td>
                             <td class="paymentOfMonth" th:text="${cp.paymentOfMonth}"></td>
-                            <td class="amountOfCredit" th:text="${cp.payLoanBodyInMonth}"></td>
-                            <td th:text="${cp.payPercentInMonth}"></td>
+                            <td class="amountOfCredit" th:text="${cp.paymentOfLoanBodyInMonth}"></td>
+                            <td th:text="${cp.paymentOfPercentInMonth}"></td>
                         </tr>
                         </tbody>
                     </div>

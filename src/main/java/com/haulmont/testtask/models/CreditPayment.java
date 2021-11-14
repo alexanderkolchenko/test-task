@@ -4,9 +4,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Класс Платеж по кредиту, содержит дату платежа, сумму платежа,
+ * сумму гашения тела кредита, сумму гашения процентов и
+ * кредитное предложение, к которому относится платеж
+ *
+ * @author Alexander Kolchenko
+ * @version 1.01 14.11.2021
+ */
 @Entity
 @Table(name = "credit_payments")
 public class CreditPayment {
@@ -15,11 +22,11 @@ public class CreditPayment {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
-    
+
     private LocalDate dateOfPayment;
     private float paymentOfMonth;
-    private float payPercentInMonth;
-    private float payLoanBodyInMonth;
+    private float paymentOfPercentInMonth;
+    private float paymentOfLoanBodyInMonth;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name ="co_cp_id")
@@ -30,8 +37,8 @@ public class CreditPayment {
     public CreditPayment(LocalDate dateOfPayment, float paymentOfMonth, float payPercentInMonth, float payLoanBodyInMonth) {
         this.dateOfPayment = dateOfPayment;
         this.paymentOfMonth = paymentOfMonth;
-        this.payPercentInMonth = payPercentInMonth;
-        this.payLoanBodyInMonth = payLoanBodyInMonth;
+        this.paymentOfPercentInMonth = payPercentInMonth;
+        this.paymentOfLoanBodyInMonth = payLoanBodyInMonth;
     }
 
     public UUID getId() {
@@ -58,20 +65,28 @@ public class CreditPayment {
         this.paymentOfMonth = paymentOfMonth;
     }
 
-    public float getPayPercentInMonth() {
-        return payPercentInMonth;
+    public float getPaymentOfPercentInMonth() {
+        return paymentOfPercentInMonth;
     }
 
-    public void setPayPercentInMonth(float payPercentInMonth) {
-        this.payPercentInMonth = payPercentInMonth;
+    public void setPaymentOfPercentInMonth(float paymentOfPercentInMonth) {
+        this.paymentOfPercentInMonth = paymentOfPercentInMonth;
     }
 
-    public float getPayLoanBodyInMonth() {
-        return payLoanBodyInMonth;
+    public float getPaymentOfLoanBodyInMonth() {
+        return paymentOfLoanBodyInMonth;
     }
 
-    public void setPayLoanBodyInMonth(float payLoanBodyInMonth) {
-        this.payLoanBodyInMonth = payLoanBodyInMonth;
+    public void setPaymentOfLoanBodyInMonth(float paymentOfLoanBodyInMonth) {
+        this.paymentOfLoanBodyInMonth = paymentOfLoanBodyInMonth;
+    }
+
+    public CreditOffer getCreditOffer() {
+        return creditOffer;
+    }
+
+    public void setCreditOffer(CreditOffer creditOffer) {
+        this.creditOffer = creditOffer;
     }
 
     @Override
@@ -79,8 +94,8 @@ public class CreditPayment {
         return "CreditPayment{" +
                 "dateOfPayment=" + dateOfPayment +
                 ", paymentOfMonth=" + paymentOfMonth +
-                ", payPercentInMonth=" + payPercentInMonth +
-                ", payLoanBodyInMonth=" + payLoanBodyInMonth +
+                ", payPercentInMonth=" + paymentOfPercentInMonth +
+                ", payLoanBodyInMonth=" + paymentOfLoanBodyInMonth +
                 '}';
     }
 }

@@ -1,14 +1,17 @@
 package com.haulmont.testtask.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sun.xml.bind.v2.TODO;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.*;
 
+/**
+ * Класс Клиент, содержит ФИО клиента, номер телефона, e-mail,
+ * номер паспорта, список банков, в которых имеет кредиты и список кредитов
+ *
+ * @author Alexander Kolchenko
+ * @version 1.01 14.11.2021
+ */
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -25,18 +28,20 @@ public class Customer {
     private String email;
     private String passportNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY /*cascade = CascadeType.ALL*/)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "customer_banks",
             joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
-    private Set<Bank> banks = new HashSet<>();
+    private Set<Bank> listOfBanks = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     List<CreditOffer> creditOffers = new ArrayList<>();
 
-    public Customer(String surname, String name, String patronymic, String phoneNumber, String email, String passportNumber) {
+    public Customer() {
+    }
 
+    public Customer(String surname, String name, String patronymic, String phoneNumber, String email, String passportNumber) {
         this.surname = surname;
         this.name = name;
         this.patronymic = patronymic;
@@ -45,11 +50,9 @@ public class Customer {
         this.passportNumber = passportNumber;
     }
 
-    public Customer() {
-    }
-
+    /* Удаление банка из списка банков клиента при удалении объекта банка из БД */
     public void deleteBankFromCustomer(Bank bank) {
-        this.banks.remove(bank);
+        this.listOfBanks.remove(bank);
         bank.getListOfCustomers().remove(this);
     }
 
@@ -110,11 +113,11 @@ public class Customer {
     }
 
     public Set<Bank> getBanks() {
-        return banks;
+        return listOfBanks;
     }
 
     public void setBanks(Set<Bank> banks) {
-        this.banks = banks;
+        this.listOfBanks = banks;
     }
 
     public List<CreditOffer> getCreditOffers() {

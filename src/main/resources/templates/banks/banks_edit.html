@@ -106,7 +106,7 @@
                                 <td th:text="${creditOffers.indexOf(co)} + 1"/>
                                 <td th:text="${co.getCustomer().toString()}"/>
                                 <td class="text-end" th:text="${co.creditAmount}"/>
-                                <td class="text-end" th:text="${co.getCredit().interestRate}"/>
+                                <td class="text-end" th:text="${#numbers.formatDecimal(co.getCredit().interestRate, 1, 2)}"/>
                                 <td class="text-end">
                                     <form th:action="'/banks/edit/'+ ${co.id} +'/' +${bank.id} + '/' + 'remove_credit_offer'"
                                           method="post">
