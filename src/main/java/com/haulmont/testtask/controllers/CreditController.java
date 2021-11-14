@@ -58,7 +58,6 @@ public class CreditController {
     @PostMapping("/credits/add")
     public String addCreditSubmit(@RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
         interestRate = CreditOffersController.withMathRound(interestRate, 2);
-        System.out.println(interestRate);
         Credit credit = new Credit(creditLimit, interestRate);
         creditRepository.save(credit);
         return "redirect:/credits";
@@ -66,7 +65,6 @@ public class CreditController {
 
     @GetMapping("/credits/{id}")
     public String editCredit(@PathVariable(value = "id") UUID id, Model model) {
-        System.out.println(id);
         if (!creditRepository.existsById(id)) {
             return "redirect:/";
         }
@@ -93,7 +91,6 @@ public class CreditController {
     public String deleteСredit(@PathVariable(value = "id") UUID id, Model model) {
         Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         for (CreditOffer co : credit.getCreditOffers()) {
-            System.out.println(co.getId());
             creditPaymentRepository.deleteCreditPaymentById(co.getId());
         }
         creditOfferRepository.deleteCreditOfferByCredit(id);
