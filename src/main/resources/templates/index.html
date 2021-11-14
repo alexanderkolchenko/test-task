@@ -52,6 +52,7 @@
                         <th class="col-sm-5"></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -61,15 +62,21 @@
                         <td></td>
 
                         <td><a th:href="'/banks/' + ${bank.id}"
-                               class="btn btn-sm btn-outline-secondary">Подробнее</a></td>
+                               class="btn btn-sm btn-outline-secondary">Информация о банке</a></td>
                         <td><a th:href="'/banks/edit/' + ${bank.id}"
                                class="btn btn-sm btn-outline-secondary">Редактировать</a></td>
+                        <td>
+                            <form th:action="'/banks/remove/' + ${bank.id}" method="post">
+                                <button class="btn btn-sm btn-outline-danger">Удалить банк </button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
+
 </div>
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>

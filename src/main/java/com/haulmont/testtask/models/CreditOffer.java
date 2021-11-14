@@ -22,7 +22,7 @@ public class CreditOffer {
     @JoinColumn(name ="credit_id")
     private Credit credit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
     @JoinColumn(name ="bank_id")
     private Bank bank;
 

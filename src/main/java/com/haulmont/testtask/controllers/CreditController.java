@@ -1,7 +1,11 @@
 package com.haulmont.testtask.controllers;
 
 import com.haulmont.testtask.models.Credit;
+import com.haulmont.testtask.models.CreditOffer;
 import com.haulmont.testtask.models.Customer;
+import com.haulmont.testtask.repository.BankRepository;
+import com.haulmont.testtask.repository.CreditOfferRepository;
+import com.haulmont.testtask.repository.CreditPaymentRepository;
 import com.haulmont.testtask.repository.CreditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +24,15 @@ import java.util.UUID;
 public class CreditController {
     @Autowired
     CreditRepository creditRepository;
+
+    @Autowired
+    CreditOfferRepository creditOfferRepository;
+
+    @Autowired
+    BankRepository bankRepository;
+
+    @Autowired
+    CreditPaymentRepository creditPaymentRepository;
 
     @GetMapping("/credits")
     public String getCredits(Model model) {
@@ -67,7 +80,16 @@ public class CreditController {
     @PostMapping("/credits/{id}/remove")
     public String deleteСredit(@PathVariable(value = "id") UUID id, Model model) {
         Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        for (CreditOffer co : credit.getCreditOffers()) {
+            System.out.println(co.getId());
+            creditPaymentRepository.deleteCreditPaymentById(co.getId());
+        }
+        creditOfferRepository.deleteCreditOfferByCredit(id);
+        bankRepository.findAll().forEach((b)->b.deleteCreditFromBank(credit));
+        credit.getBanks().clear();
         creditRepository.delete(credit);
+        //creditRepository.deleteCreditOffer(id);
+        //creditRepository.deleteCredit(id);
         return "redirect:/credits";
     }
 }

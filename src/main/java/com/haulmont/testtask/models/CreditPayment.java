@@ -21,7 +21,7 @@ public class CreditPayment {
     private float payPercentInMonth;
     private float payLoanBodyInMonth;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name ="co_cp_id")
     private CreditOffer creditOffer;
 

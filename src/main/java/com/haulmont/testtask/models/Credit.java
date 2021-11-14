@@ -17,13 +17,13 @@ public class Credit {
     private int creditLimit;
     private double interestRate;
 
-    @ManyToMany(fetch = FetchType.LAZY/* cascade = CascadeType.ALL*/)
+    @ManyToMany(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
     @JoinTable(name = "credit_banks",
             joinColumns = {@JoinColumn(name = "credit_id")},
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
     private Set<Bank> banks = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(/*cascade = CascadeType.ALL*/)
     @JoinColumn(name = "credit_id", referencedColumnName = "id")
     List<CreditOffer> creditOffers = new ArrayList<>();
 
@@ -33,6 +33,11 @@ public class Credit {
     }
 
     public Credit() {
+    }
+
+    public void deleteBankFromCredit(Bank bank) {
+        this.banks.remove(bank);
+        bank.getListOfCredits().remove(this);
     }
 
     public UUID getId() {
@@ -65,5 +70,13 @@ public class Credit {
 
     public void setBanks(Set<Bank> banks) {
         this.banks = banks;
+    }
+
+    public List<CreditOffer> getCreditOffers() {
+        return creditOffers;
+    }
+
+    public void setCreditOffers(List<CreditOffer> creditOffers) {
+        this.creditOffers = creditOffers;
     }
 }

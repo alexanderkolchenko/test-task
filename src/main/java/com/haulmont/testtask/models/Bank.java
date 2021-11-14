@@ -15,10 +15,10 @@ public class Bank {
 
     private String nameOfBank;
 
-    @ManyToMany(fetch = FetchType.LAZY,/* cascade = CascadeType.ALL,*/ mappedBy = "banks")
+    @ManyToMany(fetch = FetchType.LAZY,/*, cascade = CascadeType.ALL,*/ mappedBy = "banks")
     private Set<Credit> listOfCredits = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "banks")
+    @ManyToMany(fetch = FetchType.LAZY,/*, cascade = CascadeType.ALL,*/ mappedBy = "banks")
     private Set<Customer> listOfCustomers = new HashSet<>();
 
     public Bank(String nameOfBank) {
@@ -26,6 +26,16 @@ public class Bank {
     }
 
     public Bank() {
+    }
+
+    public void deleteCreditFromBank(Credit credit) {
+        this.listOfCredits.remove(credit);
+        credit.getBanks().remove(this);
+    }
+
+    public void deleteCustomerFromBank(Customer customer) {
+        this.listOfCustomers.remove(customer);
+        customer.getBanks().remove(this);
     }
 
 

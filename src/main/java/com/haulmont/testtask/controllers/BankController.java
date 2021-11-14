@@ -4,6 +4,7 @@ import com.haulmont.testtask.models.*;
 import com.haulmont.testtask.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -174,15 +175,25 @@ public class BankController {
                 bank.getListOfCredits().remove(c);
             }
         }
-
         bankRepository.save(bank);
         return editBank(id, model);
     }
 
-    //отсюда
-    @PostMapping("/banks/{id}/remove")
+    @PostMapping("/banks/remove/{id}")
     public String deleteBank(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+
+        for (CreditOffer co : bank.getCreditOffers()) {
+            creditPaymentRepository.deleteCreditPaymentById(co.getId());
+        }
+       // creditOfferRepository.deleteCreditOfferFromBank(id);
+
+        customerRepository.findAll().forEach((c)->c.deleteBankFromCustomer(bank));
+
+        creditRepository.findAll().forEach((c)->c.deleteBankFromCredit(bank));
+
+        bank.getListOfCredits().clear();
+        bank.getListOfCustomers().clear();
         bankRepository.delete(bank);
         return "redirect:/";
     }

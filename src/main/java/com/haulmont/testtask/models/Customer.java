@@ -25,7 +25,7 @@ public class Customer {
     private String email;
     private String passportNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY /*cascade = CascadeType.ALL*/)
     @JoinTable(name = "customer_banks",
             joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
@@ -46,6 +46,11 @@ public class Customer {
     }
 
     public Customer() {
+    }
+
+    public void deleteBankFromCustomer(Bank bank) {
+        this.banks.remove(bank);
+        bank.getListOfCustomers().remove(this);
     }
 
     public UUID getId() {

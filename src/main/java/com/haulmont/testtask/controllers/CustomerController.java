@@ -1,6 +1,11 @@
 package com.haulmont.testtask.controllers;
 
+import com.haulmont.testtask.models.Bank;
+import com.haulmont.testtask.models.CreditOffer;
 import com.haulmont.testtask.models.Customer;
+import com.haulmont.testtask.repository.BankRepository;
+import com.haulmont.testtask.repository.CreditOfferRepository;
+import com.haulmont.testtask.repository.CreditPaymentRepository;
 import com.haulmont.testtask.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +18,16 @@ import java.util.*;
 public class CustomerController {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    CustomerRepository customerRepository;
+
+    @Autowired
+    CreditOfferRepository creditOfferRepository;
+
+    @Autowired
+    BankRepository bankRepository;
+
+    @Autowired
+    CreditPaymentRepository creditPaymentRepository;
 
     @GetMapping("/customers")
     public String getCustomer(Model model) {
@@ -71,9 +85,19 @@ public class CustomerController {
     @PostMapping("/customers/{id}/remove")
     public String deleteCustomer(@PathVariable(value = "id") UUID id, Model model) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        for (CreditOffer co : customer.getCreditOffers()) {
+            System.out.println(co.getId());
+            creditPaymentRepository.deleteCreditPaymentById(co.getId());
+
+        }
+        creditOfferRepository.deleteCreditOfferByCustomer(id);
+        bankRepository.findAll().forEach((b) -> b.deleteCustomerFromBank(customer));
+        customer.getCreditOffers().clear();
         customerRepository.delete(customer);
         return "redirect:/customers";
     }
+
+
 
 
 }
