@@ -39,7 +39,7 @@
             <form class="needs-validation" th:action="@{/creditOffers}" method="post" novalidate="">
                 <div class="row g-5">
                     <div class="accordion accordion-flush col-sm-5" id="accordionFlushExample">
-                        <p class="fw-bolder px-4">Выберите банк</p>
+                        <p class="fw-bolder px-4">Выберите банк и кредит</p>
                         <hr class="p-0 m-0">
                         <div th:each="bank:${banks}">
                             <div class="accordion-item">
@@ -57,7 +57,7 @@
                                         <p class="fw-bolder">Список доступных кредитов</p>
                                         <div class="form-check" th:each="credit:${bank.getListOfCredits()}">
 
-                                            <input class="form-check-input checkCredit" type="radio"
+                                            <input class="form-check-input checkCredit" type="radio" checked
                                                    name="loanSelection"
                                                    th:id="${credit.id} +':'+ ${bank.id}"
                                                    th:value="${credit.id} +':'+ ${bank.id}">
@@ -89,11 +89,17 @@
                     <div class="col-sm-3">
                         <label for="amountOfCredit" class="form-label">Сумма кредита, руб.</label>
                         <input type="number" class="form-control" step="50000" name="amountOfCredit" id="amountOfCredit"
-                               max="" min="0"
-                               placeholder="Выберите кредит" value=""
-                               required="">
+                               max="" min="0" placeholder="" value="" required="">
                         <div class="invalid-feedback">
                             Valid first name is required.
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="limitOfCredit" class="form-label">Лимит по кредиту, руб.</label>
+                        <input type="number" readonly="true" class=" text-secondary form-control" step="50000"
+                               name="limitOfCredit" id="limitOfCredit"
+                               max="" min="0" placeholder="" value="" required="">
+                        <div class="invalid-feedback">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -104,7 +110,7 @@
                         </fieldset>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <label class="form-label">Срок</label>
                         <select id="numberOfMonth" name="numberOfMonth" class="form-select"
                                 aria-label="Default select example">
@@ -117,28 +123,28 @@
                             <option value="120">10 лет</option>
                         </select>
                     </div>
-
-
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <label for="datePicker" class="form-label">Дата выдачи</label>
                         <input th:type="date" class="form-control" name="startDate" id="datepicker" value=""
                                required="">
                         <div class="invalid-feedback">
-                            Please enter your shipping address.
                         </div>
-
                     </div>
-                    <div class="d-grid gap-2 d-md-block">
+
+                    <p id="negative" class="text-danger invisible my-0 py-0">*Сумма должна быть положительной</p>
+                    <p id="overlimit" class="text-danger invisible my-0 py-0">*Сумма превышает лимит по кредиту</p>
+
+                    <div class="d-grid my-0 gap-2 d-md-block">
                         <button id="buttonForSchedule" class=" btn btn-primary btn-sm">Рассчитать расходы</button>
-                        <button class="mx-3 px-4 btn btn-success btn-sm" type="submit">Оформить кредит</button>
+                        <button id="deal" class="mx-3 px-4 btn btn-success btn-sm" type="submit">Оформить кредит
+                        </button>
                     </div>
-
                 </div>
             </form>
             <br>
             <br>
             <br>
-            <div class="row col-sm-6 invisible resultTable">
+            <div class="row mx-1 col-sm-6 invisible resultTable">
                 <table>
                     <thead>
                     <tr>
@@ -179,23 +185,33 @@
             <br>
             <br>
             <br>
+
         </main>
     </div>
+
 </div>
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
 <script>
+    //
     $('input[type=radio][name=loanSelection]').change(function () {
-        //$('#amountOfCredit').val('');
         var v = $(this).siblings().text().split(' руб., ');
         $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
         $('#amountOfCredit').val(v[0]);
+        $('#limitOfCredit').val(v[0]);
         $('#interestRateField').attr({"value": v[1].slice(0, -1)});
-        console.log($('#interestRateField').val())
-        console.log(v)
     })
+    $(document).ready(function () {
+        let v = $('input[type=radio][name=loanSelection]').last().siblings().text().split(' руб., ');
+        $('#amountOfCredit').val()
+        $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
+        $('#amountOfCredit').val(v[0]);
+        $('#limitOfCredit').val(v[0]);
+        $('#interestRateField').attr({"value": v[1].slice(0, -1)});
+    });
 
-    //сегодняшняя дата и установка ее в календарь
+
+    //текущая дата и установка ее в календарь
     Date.prototype.toDateInputValue = (function () {
         let local = new Date(this);
         local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
@@ -205,17 +221,13 @@
         $('#datepicker').val(new Date().toDateInputValue());
     });
 
-    //распечатка графика
-    $('#buttonForSchedule').click(function (e) {
-
-        e.preventDefault();
-        $('#paymentSchedule').empty();
-
-        let amountOfCredit = parseInt($('#amountOfCredit').val());
-        let amountOfCreditConst = amountOfCredit;
-        let interestRate = parseFloat($('#interestRateField').val());
-        let numberOfMonth = parseInt($('#numberOfMonth').val());
-        let currentDate = new Date($('#datepicker').val());
+    $(document).ready(function () {
+        let amountOfCredit;
+        let amountOfCreditConst;
+        let interestRate;
+        let numberOfMonth;
+        let currentDate;
+        let limitOfCredit;
         let totalAmount = 0;
         let payPercentInMonth;
         let payLoanBodyInMonth;
@@ -223,33 +235,59 @@
         let percentOfMonth;
         let overpayment;
 
-
-
-        if (!isNaN(amountOfCredit) && !isNaN(interestRate)) {
-            percentOfMonth = parseFloat((interestRate / (100 * 12)).toFixed(6));
-            paymentOfMonth = (amountOfCredit * (percentOfMonth / (1 - (Math.pow((percentOfMonth + 1), numberOfMonth * -1))))).toFixed(2);
-            for (let i = 0; i < numberOfMonth; i++) {
-                payPercentInMonth = (amountOfCredit * percentOfMonth).toFixed(2);
-                payLoanBodyInMonth = (paymentOfMonth - payPercentInMonth).toFixed(2);
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                $('#paymentSchedule').append('<tr><td>' + currentDate.toLocaleDateString() + '</td><td>' + paymentOfMonth + '</td><td>' + payLoanBodyInMonth + '</td><td>' + payPercentInMonth + '</td></tr>');
-                amountOfCredit -= payLoanBodyInMonth;
-                totalAmount += parseFloat(paymentOfMonth);
-                // overpayment += parseFloat(payPercentInMonth);
+        $('#deal').click(function (e) {
+            if (!checkInput()) {
+                e.preventDefault();
             }
-            overpayment = totalAmount - amountOfCreditConst;
+        })
 
-            $('#total').html(totalAmount.toFixed(2) + ' руб.');
-            $('#overpayment').html(overpayment.toFixed(2) + ' руб.');
-            $('.resultTable').removeClass("invisible");
-        }
-        else {
-            //TODO проверка на пустые полля
-            if(isNaN(amountOfCredit)) {
+        $('#buttonForSchedule').click(function f(e) {
+            e.preventDefault();
+            $('#paymentSchedule').empty();
+            if (checkInput()) {
+                percentOfMonth = parseFloat((interestRate / (100 * 12)).toFixed(6));
+                paymentOfMonth = (amountOfCredit * (percentOfMonth / (1 - (Math.pow((percentOfMonth + 1), numberOfMonth * -1))))).toFixed(2);
+                for (let i = 0; i < numberOfMonth; i++) {
+                    payPercentInMonth = (amountOfCredit * percentOfMonth).toFixed(2);
+                    payLoanBodyInMonth = (paymentOfMonth - payPercentInMonth).toFixed(2);
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    $('#paymentSchedule').append('<tr><td>' + currentDate.toLocaleDateString() + '</td><td>' + paymentOfMonth + '</td><td>' + payLoanBodyInMonth + '</td><td>' + payPercentInMonth + '</td></tr>');
+                    amountOfCredit -= payLoanBodyInMonth;
+                    totalAmount += parseFloat(paymentOfMonth);
+                }
+                overpayment = totalAmount - amountOfCreditConst;
+                $('#total').html(totalAmount.toFixed(2) + ' руб.');
+                $('#overpayment').html(overpayment.toFixed(2) + ' руб.');
+                $('.resultTable').removeClass("invisible");
 
             }
+        })
+
+        function checkInput() {
+            amountOfCredit = parseInt($('#amountOfCredit').val());
+            amountOfCreditConst = amountOfCredit;
+            interestRate = parseFloat($('#interestRateField').val());
+            numberOfMonth = parseInt($('#numberOfMonth').val());
+            currentDate = new Date($('#datepicker').val());
+            limitOfCredit = $('#limitOfCredit').val();
+            if (isNaN(amountOfCredit) || amountOfCredit <= 0 || amountOfCredit > limitOfCredit) {
+                if (isNaN(amountOfCredit)) {
+                    $('#amountOfCredit').attr("placeholder", "Выберите кредит ");
+                }
+                if (amountOfCredit <= 0) {
+                    $('#negative').removeClass("invisible");
+                    $('#overlimit').addClass("invisible");
+                }
+                if (amountOfCredit > limitOfCredit) {
+                    $('#overlimit').removeClass("invisible");
+                    $('#negative').addClass("invisible");
+                }
+                return false;
+            }
+            return true;
         }
     })
+
 
 </script>
 </body>
