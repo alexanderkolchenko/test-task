@@ -19,6 +19,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+
+/**
+ * Класс контролер, реализует добавление, редактирование и удаление кредита
+ *
+ * @author Alexander Kolchenko
+ * @version 1.01 14.11.2021
+ */
 @Controller
 public class CreditController {
     @Autowired
@@ -41,13 +48,14 @@ public class CreditController {
         model.addAttribute("title", "Кредиты");
         return "credits/credits";
     }
+
     @GetMapping("/credits/add")
-    public String addCreditPage(Model model) {
+    public String getCreditsPage(Model model) {
         model.addAttribute("title", "Добавить кредит");
         return "credits/credits_add";
     }
+
     @PostMapping("/credits/add")
-    //todo valid
     public String addCreditSubmit(@RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
         interestRate = CreditOffersController.withMathRound(interestRate, 2);
         System.out.println(interestRate);
@@ -55,7 +63,6 @@ public class CreditController {
         creditRepository.save(credit);
         return "redirect:/credits";
     }
-
 
     @GetMapping("/credits/{id}")
     public String editCredit(@PathVariable(value = "id") UUID id, Model model) {
@@ -78,6 +85,10 @@ public class CreditController {
         return "redirect:/credits";
     }
 
+    /*
+    * Удаление кредита и его связей с клиентами и банками,
+    * удаляются все выданные кредитные предложения с этим кредитом, и их графики
+    */
     @PostMapping("/credits/{id}/remove")
     public String deleteСredit(@PathVariable(value = "id") UUID id, Model model) {
         Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
@@ -89,8 +100,6 @@ public class CreditController {
         bankRepository.findAll().forEach((b)->b.deleteCreditFromBank(credit));
         credit.getBanks().clear();
         creditRepository.delete(credit);
-        //creditRepository.deleteCreditOffer(id);
-        //creditRepository.deleteCredit(id);
         return "redirect:/credits";
     }
 }

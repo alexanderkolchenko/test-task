@@ -33,7 +33,6 @@ public class BankController {
     @Autowired
     CreditOfferRepository creditOfferRepository;
 
-
     /*начальная страница со списком банков*/
     @GetMapping("/")
     public String getListOfBanks(Model model) {
@@ -137,16 +136,15 @@ public class BankController {
 
     /*удаление оформленного кредита вместе с графиками со страницы редактирования банка*/
     @PostMapping("/banks/edit/{id}/{bank_id}/remove_credit_offer")
-    public String deleteCreditOfferFromBank(@PathVariable(value = "id") UUID id, @PathVariable(value = "bank_id") UUID bank_id, Model model) {
+    public String deleteCreditOffersFromBank(@PathVariable(value = "id") UUID id, @PathVariable(value = "bank_id") UUID bank_id, Model model) {
         CreditOffer creditOffer = creditOfferRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         creditOfferRepository.delete(creditOffer);
         return editBank(bank_id, model);
     }
 
-
     /*редактирование банка, изменение названия и списка доступных кредитов*/
     @PostMapping("/banks/edit/{id}")
-    public String editBank(@PathVariable(value = "id", required = false) UUID id,
+    public String updateBank(@PathVariable(value = "id", required = false) UUID id,
                            @RequestParam(required = false) String[] idOfCredit,
                            @RequestParam String nameOfBank, Model model) {
         Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
@@ -154,9 +152,7 @@ public class BankController {
         List<Credit> listOfCreditsOfBank = new ArrayList<>(bank.getListOfCredits());
         List<Credit> newCredit = new ArrayList<>();
 
-        /*
-         * добавляем кредит после настройки чекбокса, если кредит отсутствовал в списке банка
-         */
+        /* добавляем кредит после настройки чекбокса, если кредит отсутствовал в списке банка*/
         if (idOfCredit != null) {
             for (String i : idOfCredit) {
                 UUID j = UUID.fromString(i);
@@ -168,9 +164,8 @@ public class BankController {
                 }
             }
         }
-        /*
-         * удаляем кредит после настройки чекбокса, если кредит присутствовал в списке банка
-         */
+
+        /* удаляем кредит после настройки чекбокса, если кредит присутствовал в списке банка */
         for (Credit c : listOfCreditsOfBank) {
             if (!newCredit.contains(c)) {
                 c.getBanks().remove(bank);

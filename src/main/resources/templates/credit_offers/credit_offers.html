@@ -193,7 +193,8 @@
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
 <script>
-    //
+
+    //вставка значений чекбокса в поля суммы кредита и процентной ставки
     $('input[type=radio][name=loanSelection]').change(function () {
         var v = $(this).siblings().text().split(' руб., ');
         $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
@@ -201,6 +202,11 @@
         $('#limitOfCredit').val(v[0]);
         $('#interestRateField').attr({"value": v[1].slice(0, -1)});
     })
+
+    /*
+    * вставка значений чекбокса в поля суммы кредита и процентной ставки
+    * при загрузке страницы
+     */
     $(document).ready(function () {
         let v = $('input[type=radio][name=loanSelection]').last().siblings().text().split(' руб., ');
         $('#amountOfCredit').val()
@@ -221,7 +227,9 @@
         $('#datepicker').val(new Date().toDateInputValue());
     });
 
+
     $(document).ready(function () {
+
         let amountOfCredit;
         let amountOfCreditConst;
         let interestRate;
@@ -235,12 +243,14 @@
         let percentOfMonth;
         let overpayment;
 
+        //валидация перед оформлением кредита
         $('#deal').click(function (e) {
             if (!checkInput()) {
                 e.preventDefault();
             }
         })
 
+        //расчет ежемесяных платежей и распечатка графика платежей перед оформлением кредита
         $('#buttonForSchedule').click(function f(e) {
             e.preventDefault();
             $('#paymentSchedule').empty();
@@ -259,10 +269,10 @@
                 $('#total').html(totalAmount.toFixed(2) + ' руб.');
                 $('#overpayment').html(overpayment.toFixed(2) + ' руб.');
                 $('.resultTable').removeClass("invisible");
-
             }
         })
 
+        //валидация полей суммы кредита и процентной ставки
         function checkInput() {
             amountOfCredit = parseInt($('#amountOfCredit').val());
             amountOfCreditConst = amountOfCredit;
@@ -287,8 +297,6 @@
             return true;
         }
     })
-
-
 </script>
 </body>
 </html>
