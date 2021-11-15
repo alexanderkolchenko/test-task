@@ -10,8 +10,8 @@ https://github.com/alexanderkolchenko/test-task/tree/main/src/main/resources/db
 
 JDK 8, Maven 3, Spring-Boot
 
-Build and Run in the command line:
-mvn package
+Build and Run in the command line:<br>
+mvn package<br>
 mvn spring-boot:run
 
 Open http://localhost:8080 in a web browser.
