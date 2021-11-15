@@ -131,7 +131,7 @@ public class BankController {
         model.addAttribute("bank", bank);
         model.addAttribute("customers", customers);
         model.addAttribute("title", "Редактирование банка: " + bank.getNameOfBank());
-        return "banks/banks_edit";
+        return "/banks/banks_edit";
     }
 
     /*удаление оформленного кредита вместе с графиками со страницы редактирования банка*/
@@ -145,8 +145,8 @@ public class BankController {
     /*редактирование банка, изменение названия и списка доступных кредитов*/
     @PostMapping("/banks/edit/{id}")
     public String updateBank(@PathVariable(value = "id", required = false) UUID id,
-                           @RequestParam(required = false) String[] idOfCredit,
-                           @RequestParam String nameOfBank, Model model) {
+                             @RequestParam(required = false) String[] idOfCredit,
+                             @RequestParam String nameOfBank, Model model) {
         Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         bank.setNameOfBank(nameOfBank);
         List<Credit> listOfCreditsOfBank = new ArrayList<>(bank.getListOfCredits());
@@ -177,10 +177,10 @@ public class BankController {
     }
 
     /*
-    * Удаление банка и его связей с клиентами к кредитами,
-    * удаляются все выданные банком кредитные предложения, их графики,
-    * клиенты и кредиты остаются доступными для других банков
-    */
+     * Удаление банка и его связей с клиентами к кредитами,
+     * удаляются все выданные банком кредитные предложения, их графики,
+     * клиенты и кредиты остаются доступными для других банков
+     */
     @PostMapping("/banks/remove/{id}")
     public String deleteBank(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());

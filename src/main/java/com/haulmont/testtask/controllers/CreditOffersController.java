@@ -103,7 +103,6 @@ public class CreditOffersController {
         bank.getListOfCustomers().add(customer);
         customer.getBanks().add(bank);
         creditOfferRepository.save(creditOffer);
-        System.out.println("norm");
         return "redirect:/creditOffers";
     }
 
