@@ -11,7 +11,7 @@ https://github.com/alexanderkolchenko/test-task/tree/main/src/main/resources/db
 скрипт БД:
 https://github.com/alexanderkolchenko/test-task/blob/main/src/main/resources/db/create_db.sql
 
-JDK 8, Maven 3, Spring-Boot
+JDK 8, Maven 3, Spring-Boot, Jetty Server
 
 Build and Run in the command line:<br>
 mvn package<br>
