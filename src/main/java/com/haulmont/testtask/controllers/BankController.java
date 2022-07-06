@@ -103,8 +103,8 @@ public class BankController {
         /**/
         List<CreditPayment> creditPayments = new ArrayList<>();
         creditPaymentRepository.findCreditPaymentsBycci(co_id).forEach(creditPayments::add);
-        Customer customer = customerRepository.findById(customer_id).orElseThrow(() -> new NoSuchElementException());
-        Collections.sort(creditPayments, (a, b) -> a.getDateOfPayment().compareTo(b.getDateOfPayment()));
+        Customer customer = customerRepository.findById(customer_id).orElseThrow(NoSuchElementException::new);
+        Collections.sort(creditPayments, Comparator.comparing(CreditPayment::getDateOfPayment));
 
         model.addAttribute("credits", credits);
         model.addAttribute("bank", bank);
@@ -137,7 +137,7 @@ public class BankController {
     /*удаление оформленного кредита вместе с графиками со страницы редактирования банка*/
     @PostMapping("/banks/edit/{id}/{bank_id}/remove_credit_offer")
     public String deleteCreditOffersFromBank(@PathVariable(value = "id") UUID id, @PathVariable(value = "bank_id") UUID bank_id, Model model) {
-        CreditOffer creditOffer = creditOfferRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        CreditOffer creditOffer = creditOfferRepository.findById(id).orElseThrow(NoSuchElementException::new);
         creditOfferRepository.delete(creditOffer);
         return editBank(bank_id, model);
     }
@@ -147,7 +147,7 @@ public class BankController {
     public String updateBank(@PathVariable(value = "id", required = false) UUID id,
                              @RequestParam(required = false) String[] idOfCredit,
                              @RequestParam String nameOfBank, Model model) {
-        Bank bank = bankRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        Bank bank = bankRepository.findById(id).orElseThrow(NoSuchElementException::new);
         bank.setNameOfBank(nameOfBank);
         List<Credit> listOfCreditsOfBank = new ArrayList<>(bank.getListOfCredits());
         List<Credit> newCredit = new ArrayList<>();
@@ -156,7 +156,7 @@ public class BankController {
         if (idOfCredit != null) {
             for (String i : idOfCredit) {
                 UUID j = UUID.fromString(i);
-                Credit c = creditRepository.findById(j).orElseThrow(() -> new NoSuchElementException());
+                Credit c = creditRepository.findById(j).orElseThrow(NoSuchElementException::new);
                 newCredit.add(c);
                 if (!listOfCreditsOfBank.contains(c)) {
                     c.getBanks().add(bank);

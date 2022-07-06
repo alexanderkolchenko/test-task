@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -76,7 +75,7 @@ public class CreditController {
 
     @PostMapping("/credits/{id}")
     public String updateCredit(@PathVariable(value = "id") UUID id, @RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
-        Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        Credit credit = creditRepository.findById(id).orElseThrow(NoSuchElementException::new);
         credit.setCreditLimit(creditLimit);
         credit.setInterestRate(interestRate);
         creditRepository.save(credit);
@@ -88,8 +87,8 @@ public class CreditController {
     * удаляются все выданные кредитные предложения с этим кредитом, и их графики
     */
     @PostMapping("/credits/{id}/remove")
-    public String deleteСredit(@PathVariable(value = "id") UUID id, Model model) {
-        Credit credit = creditRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+    public String deleteCredit(@PathVariable(value = "id") UUID id, Model model) {
+        Credit credit = creditRepository.findById(id).orElseThrow(NoSuchElementException::new);
         for (CreditOffer co : credit.getCreditOffers()) {
             creditPaymentRepository.deleteCreditPaymentById(co.getId());
         }

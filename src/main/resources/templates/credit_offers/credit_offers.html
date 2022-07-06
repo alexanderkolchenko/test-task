@@ -255,6 +255,7 @@
             e.preventDefault();
             $('#paymentSchedule').empty();
             if (checkInput()) {
+                totalAmount = 0;
                 percentOfMonth = parseFloat((interestRate / (100 * 12)).toFixed(6));
                 paymentOfMonth = (amountOfCredit * (percentOfMonth / (1 - (Math.pow((percentOfMonth + 1), numberOfMonth * -1))))).toFixed(2);
                 for (let i = 0; i < numberOfMonth; i++) {
@@ -266,6 +267,8 @@
                     totalAmount += parseFloat(paymentOfMonth);
                 }
                 overpayment = totalAmount - amountOfCreditConst;
+                console.log(totalAmount);
+                console.log(amountOfCreditConst);
                 $('#total').html(totalAmount.toFixed(2) + ' руб.');
                 $('#overpayment').html(overpayment.toFixed(2) + ' руб.');
                 $('.resultTable').removeClass("invisible");
