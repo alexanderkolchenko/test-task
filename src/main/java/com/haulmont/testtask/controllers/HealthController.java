@@ -9,11 +9,8 @@ import javax.persistence.PersistenceContext;
 
 @RestController
 @RequestMapping("/health")
-public class HealthController {
+public class HealthController
 
-    int i;
-
-    String s;
 
     @PersistenceContext
     protected EntityManager entityManager;
