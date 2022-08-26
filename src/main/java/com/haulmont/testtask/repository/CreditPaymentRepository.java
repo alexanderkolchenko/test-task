@@ -16,9 +16,7 @@ import java.util.UUID;
  */
 public interface CreditPaymentRepository extends JpaRepository<CreditPayment, UUID> {
 
-    /*используется для вывода графика платежей на странице "Информация о банке"*/
-    @Query("from CreditPayment where co_cp_id = ?1")
-    List<CreditPayment> findCreditPaymentsBycci(UUID co_cp_id);
+    List<CreditPayment> findAllByCredit_offer_id(UUID Id);
 
     /*удаление платежей при удалении клиента и его кредитного предложения*/
     @Transactional

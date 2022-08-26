@@ -2,16 +2,22 @@ package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-/**
- * Класс Банк, содержит список кредитов, список клиентов и
- * список выданных кредитных предложений
- *
- * @author Alexander Kolchenko
- * @version 1.01 14.11.2021
- */
+
 @Entity
 @Table(name = "banks")
 public class Bank {
@@ -22,35 +28,69 @@ public class Bank {
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
 
+    @Column(name = "name_of_bank")
     private String nameOfBank;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "listOfBanks")
-    private Set<Credit> listOfCredits = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+            name = "credit_banks",
+            joinColumns = @JoinColumn(name = "bank_id"),
+            inverseJoinColumns = @JoinColumn(name = "credit_id")
+    )
+    private List<Credit> credits;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "listOfBanks")
-    private Set<Customer> listOfCustomers = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+            name = "customer_banks",
+            joinColumns = @JoinColumn(name = "bank_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private List<Customer> customers;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bank_id", referencedColumnName = "id")
-    List<CreditOffer> listOfCreditOffers = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bank")
+    private List<CreditOffer> creditOffers;
+
+    public Bank() {
+    }
 
     public Bank(String nameOfBank) {
         this.nameOfBank = nameOfBank;
     }
 
-    public Bank() {
+    public void addCredit(Credit credit) {
+        if (credits == null) {
+            credits = new ArrayList<>();
+        }
+        credits.add(credit);
     }
 
     /* Удаление кредита из списка кредитов банка при удалении объекта кредита из БД */
-    public void deleteCreditFromBank(Credit credit) {
+  /*  public void deleteCreditFromBank(Credit credit) {
         this.listOfCredits.remove(credit);
         credit.getBanks().remove(this);
-    }
+    }*/
 
     /* Удаление клиента из списка клиетов банка при удалении объекта клиента из БД */
-    public void deleteCustomerFromBank(Customer customer) {
+ /*   public void deleteCustomerFromBank(Customer customer) {
         this.listOfCustomers.remove(customer);
         customer.getBanks().remove(this);
+    }
+*/
+
+    public List<Credit> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(List<Credit> credits) {
+        this.credits = credits;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 
     public UUID getId() {
@@ -69,27 +109,11 @@ public class Bank {
         this.nameOfBank = nameOfBank;
     }
 
-    public Set<Credit> getListOfCredits() {
-        return listOfCredits;
-    }
-
-    public void setListOfCredits(Set<Credit> listOfCredits) {
-        this.listOfCredits = listOfCredits;
-    }
-
-    public Set<Customer> getListOfCustomers() {
-        return listOfCustomers;
-    }
-
-    public void setListOfCustomers(Set<Customer> listOfCustomers) {
-        this.listOfCustomers = listOfCustomers;
-    }
-
     public List<CreditOffer> getCreditOffers() {
-        return listOfCreditOffers;
+        return creditOffers;
     }
 
     public void setCreditOffers(List<CreditOffer> creditOffers) {
-        this.listOfCreditOffers = creditOffers;
+        this.creditOffers = creditOffers;
     }
 }

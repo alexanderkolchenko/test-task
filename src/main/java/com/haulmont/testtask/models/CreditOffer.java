@@ -2,17 +2,18 @@ package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Класс Кредитное предложение, содержит кредит, сумму кредита, клиента,
- * выдавший его банк и график платежей
- *
- * @author Alexander Kolchenko
- * @version 1.01 14.11.2021
- */
 @Entity
 @Table(name = "creditoffers")
 public class CreditOffer {
@@ -22,22 +23,22 @@ public class CreditOffer {
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
 
+    @Column(name = "credit_amount")
     private double creditAmount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "credit_id")
     private Credit credit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "bank_id")
     private Bank bank;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "co_cp_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creditOffer")
     private List<CreditPayment> paymentSchedule;
 
     public CreditOffer() {
@@ -47,7 +48,7 @@ public class CreditOffer {
         this.customer = customer;
         this.credit = credit;
         this.bank = bank;
-        this.paymentSchedule = paymentSchedule;
+        // this.paymentSchedule = paymentSchedule;
         this.creditAmount = creditAmount;
     }
 
@@ -81,14 +82,6 @@ public class CreditOffer {
 
     public void setBank(Bank bank) {
         this.bank = bank;
-    }
-
-    public List<CreditPayment> getPaymentSchedule() {
-        return paymentSchedule;
-    }
-
-    public void setPaymentSchedule(List<CreditPayment> paymentSchedule) {
-        this.paymentSchedule = paymentSchedule;
     }
 
     public double getCreditAmount() {
