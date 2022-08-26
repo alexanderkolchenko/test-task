@@ -2,17 +2,22 @@ package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-/**
- * Класс Кредит, содержит кредитный лимит, процентную ставку,
- * спикок банков, в котором его можно оформить и список выданных
- * кредитных предложений
- *
- * @author Alexander Kolchenko
- * @version 1.01 14.11.2021
- */
+
 @Entity
 @Table(name = "credits")
 public class Credit {
@@ -23,21 +28,20 @@ public class Credit {
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
 
+    @Column(name = "credit_limit")
     private int creditLimit;
 
+    @Column(name = "interest_rate")
     private float interestRate;
 
-    /* Список банков, в которых можно оформить кредит */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "credit_banks",
             joinColumns = {@JoinColumn(name = "credit_id")},
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
-    private Set<Bank> listOfBanks = new HashSet<>();
+    private List<Bank> banks;
 
-    /*Список выданных кредитных предложений по данному кредиту*/
-    @OneToMany
-    @JoinColumn(name = "credit_id", referencedColumnName = "id")
-    List<CreditOffer> listOfCreditOffers = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "credit")
+    List<CreditOffer> creditOffers;
 
     public Credit() {
     }
@@ -48,10 +52,19 @@ public class Credit {
     }
 
     /* Удаление банка из списка банков при удалении объекта банка из БД */
-    public void deleteBankFromCredit(Bank bank) {
+   /* public void deleteBankFromCredit(Bank bank) {
         this.listOfBanks.remove(bank);
         bank.getListOfCredits().remove(this);
+   }
+   */
+
+    public void addBank(Bank bank) {
+        if (banks == null) {
+            banks = new ArrayList<>();
+        }
+        banks.add(bank);
     }
+
 
     public UUID getId() {
         return id;
@@ -77,19 +90,4 @@ public class Credit {
         this.interestRate = interestRate;
     }
 
-    public Set<Bank> getBanks() {
-        return listOfBanks;
-    }
-
-    public void setBanks(Set<Bank> banks) {
-        this.listOfBanks = banks;
-    }
-
-    public List<CreditOffer> getCreditOffers() {
-        return listOfCreditOffers;
-    }
-
-    public void setCreditOffers(List<CreditOffer> creditOffers) {
-        this.listOfCreditOffers = creditOffers;
-    }
 }

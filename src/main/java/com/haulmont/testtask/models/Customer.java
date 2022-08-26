@@ -2,16 +2,21 @@ package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.List;
+import java.util.UUID;
 
-/**
- * Класс Клиент, содержит ФИО клиента, номер телефона, e-mail,
- * номер паспорта, список банков, в которых имеет кредиты и список кредитов
- *
- * @author Alexander Kolchenko
- * @version 1.01 14.11.2021
- */
+
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -21,22 +26,33 @@ public class Customer {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
-    private String surname;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "")
     private String patronymic;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "passport_number")
     private String passportNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "customer_banks",
             joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
-    private Set<Bank> listOfBanks = new HashSet<>();
+    private List<Bank> banks;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    List<CreditOffer> creditOffers = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    private List<CreditOffer> creditOffers;
 
     public Customer() {
     }
@@ -51,10 +67,10 @@ public class Customer {
     }
 
     /* Удаление банка из списка банков клиента при удалении объекта банка из БД */
-    public void deleteBankFromCustomer(Bank bank) {
+   /* public void deleteBankFromCustomer(Bank bank) {
         this.listOfBanks.remove(bank);
         bank.getListOfCustomers().remove(this);
-    }
+    }*/
 
     public UUID getId() {
         return id;
@@ -112,21 +128,6 @@ public class Customer {
         this.passportNumber = passportNumber;
     }
 
-    public Set<Bank> getBanks() {
-        return listOfBanks;
-    }
-
-    public void setBanks(Set<Bank> banks) {
-        this.listOfBanks = banks;
-    }
-
-    public List<CreditOffer> getCreditOffers() {
-        return creditOffers;
-    }
-
-    public void setCreditOffers(List<CreditOffer> creditOffers) {
-        this.creditOffers = creditOffers;
-    }
 
     @Override
     public String toString() {
