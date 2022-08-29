@@ -45,7 +45,7 @@
                         <p class="py-0 mb-1">Список кредитов</p>
                         <div th:each="el:${credits}">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" th:value="${el.id}" th:id="${el.id}"  name="idOfCredit">
+                                <input class="form-check-input" type="checkbox" th:value="${el.id}" th:id="${el.id}"  name="creditsId">
                                 <label th:text="${el.creditLimit} + ' руб.,&nbsp' + ${el.interestRate} + '%'" th:for="${el.id}"
                                        class="form-check-label"/>
                             </div>

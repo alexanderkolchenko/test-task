@@ -2,18 +2,17 @@ package com.haulmont.testtask.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/**
- * Класс Платеж по кредиту, содержит дату платежа, сумму платежа,
- * сумму гашения тела кредита, сумму гашения процентов и
- * кредитное предложение, к которому относится платеж
- *
- * @author Alexander Kolchenko
- * @version 1.01 14.11.2021
- */
 @Entity
 @Table(name = "credit_payments")
 public class CreditPayment {
@@ -23,13 +22,20 @@ public class CreditPayment {
     @Column(name = "id", columnDefinition = "binary(16)", updatable = false, nullable = false)
     private UUID id;
 
+    @Column(name = "date_of_payment")
     private LocalDate dateOfPayment;
+
+    @Column(name = "payment_of_month")
     private float paymentOfMonth;
+
+    @Column(name = "payment_of_percent_in_month")
     private float paymentOfPercentInMonth;
+
+    @Column(name = "payment_of_loan_body_in_month")
     private float paymentOfLoanBodyInMonth;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name ="co_cp_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "credit_offer_id")
     private CreditOffer creditOffer;
 
     public CreditPayment() {
@@ -53,36 +59,16 @@ public class CreditPayment {
         return dateOfPayment;
     }
 
-    public void setDateOfPayment(LocalDate dateOfPayment) {
-        this.dateOfPayment = dateOfPayment;
-    }
-
     public float getPaymentOfMonth() {
         return paymentOfMonth;
-    }
-
-    public void setPaymentOfMonth(float paymentOfMonth) {
-        this.paymentOfMonth = paymentOfMonth;
     }
 
     public float getPaymentOfPercentInMonth() {
         return paymentOfPercentInMonth;
     }
 
-    public void setPaymentOfPercentInMonth(float paymentOfPercentInMonth) {
-        this.paymentOfPercentInMonth = paymentOfPercentInMonth;
-    }
-
     public float getPaymentOfLoanBodyInMonth() {
         return paymentOfLoanBodyInMonth;
-    }
-
-    public void setPaymentOfLoanBodyInMonth(float paymentOfLoanBodyInMonth) {
-        this.paymentOfLoanBodyInMonth = paymentOfLoanBodyInMonth;
-    }
-
-    public CreditOffer getCreditOffer() {
-        return creditOffer;
     }
 
     public void setCreditOffer(CreditOffer creditOffer) {

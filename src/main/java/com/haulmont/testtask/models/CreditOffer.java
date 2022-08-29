@@ -48,6 +48,9 @@ public class CreditOffer {
         this.credit = credit;
         this.bank = bank;
         this.paymentSchedule = paymentSchedule;
+        for (CreditPayment payment : paymentSchedule) {
+            payment.setCreditOffer(this);
+        }
         this.creditAmount = creditAmount;
     }
 
