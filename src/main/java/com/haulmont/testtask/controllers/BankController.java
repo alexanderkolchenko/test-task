@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -68,17 +69,12 @@ public class BankController {
     @GetMapping("/banks/{id}")
     public String showBankDetails(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankService.getBank(id);
-        if (bank == null) {
-            //todo check wrong bank
-        } else {
-
-            //todo try add only bank with eager
-            model.addAttribute("credits", bank.getCredits());
-            model.addAttribute("bank", bank);
-            model.addAttribute("customers", bank.getCustomers());
-            model.addAttribute("creditOffers", bank.getCreditOffers());
-            model.addAttribute("title", bank.getNameOfBank());
-        }
+        //todo try add only bank with eager
+        model.addAttribute("credits", bank.getCredits());
+        model.addAttribute("bank", bank);
+        model.addAttribute("customers", bank.getCustomers());
+        model.addAttribute("creditOffers", bank.getCreditOffers());
+        model.addAttribute("title", bank.getNameOfBank());
         return "banks/banks_details";
     }
 
@@ -86,6 +82,7 @@ public class BankController {
     public String printPaymentSchedule(@PathVariable(value = "bank_id") UUID bankId, @PathVariable(value = "credit_offer_id") UUID creditOfferId,
                                        @PathVariable(value = "customer_id") UUID customer_id, Model model) {
         Bank bank = bankService.getBank(bankId);
+
         List<CreditPayment> creditPayments = creditPaymentService.getCreditPaymentsList(creditOfferId);
         Customer customer = customerService.getCustomer(customer_id);
 

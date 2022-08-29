@@ -6,32 +6,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler<T extends NoSuchEntityException> {
 
     @ExceptionHandler
-    public ResponseEntity<BankIncorrectData> handleException(NoSuchBankException e) {
-        BankIncorrectData data = new BankIncorrectData();
-        data.setInfo(e.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<CreditIncorrectData> handleException(NoSuchCreditException e) {
-        CreditIncorrectData data = new CreditIncorrectData();
-        data.setInfo(e.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<CreditOfferIncorrectData> handleException(NoSuchCreditOfferException e) {
-        CreditOfferIncorrectData data = new CreditOfferIncorrectData();
-        data.setInfo(e.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<CustomerIncorrectData> handleException(NoSuchCustomerException e) {
-        CustomerIncorrectData data = new CustomerIncorrectData();
+    public ResponseEntity<IncorrectData> handleException(T e) {
+        IncorrectData data = new IncorrectData();
         data.setInfo(e.getMessage());
         return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }

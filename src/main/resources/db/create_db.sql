@@ -1,4 +1,3 @@
-
 drop table if exists credit_payments;
 drop table if exists creditoffers;
 drop table if exists credit_banks;
@@ -55,7 +54,7 @@ create table credit_payments
     payment_of_month              float            not null,
     payment_of_percent_in_month   float            not null,
     payment_of_loan_body_in_month float            not null,
-    credit_offer_id               UUID default null
+    credit_offer_id               UUID             not null
 );
 
 create table customer_banks

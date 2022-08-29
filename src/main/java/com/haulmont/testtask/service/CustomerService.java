@@ -1,6 +1,6 @@
 package com.haulmont.testtask.service;
 
-import com.haulmont.testtask.exception_handler.NoSuchCustomerException;
+import com.haulmont.testtask.exception_handler.exception.NoSuchCustomerException;
 import com.haulmont.testtask.models.Customer;
 import com.haulmont.testtask.repository.CreditPaymentRepository;
 import com.haulmont.testtask.repository.CustomerRepository;
