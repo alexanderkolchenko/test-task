@@ -71,26 +71,6 @@ public class CreditPayment {
         return paymentOfLoanBodyInMonth;
     }
 
-    public void setDateOfPayment(LocalDate dateOfPayment) {
-        this.dateOfPayment = dateOfPayment;
-    }
-
-    public void setPaymentOfMonth(float paymentOfMonth) {
-        this.paymentOfMonth = paymentOfMonth;
-    }
-
-    public void setPaymentOfPercentInMonth(float paymentOfPercentInMonth) {
-        this.paymentOfPercentInMonth = paymentOfPercentInMonth;
-    }
-
-    public void setPaymentOfLoanBodyInMonth(float paymentOfLoanBodyInMonth) {
-        this.paymentOfLoanBodyInMonth = paymentOfLoanBodyInMonth;
-    }
-
-    public CreditOffer getCreditOffer() {
-        return creditOffer;
-    }
-
     public void setCreditOffer(CreditOffer creditOffer) {
         this.creditOffer = creditOffer;
     }

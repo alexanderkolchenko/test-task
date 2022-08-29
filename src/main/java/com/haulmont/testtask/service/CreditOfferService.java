@@ -1,6 +1,6 @@
 package com.haulmont.testtask.service;
 
-import com.haulmont.testtask.exception_handler.NoSuchCreditOfferException;
+import com.haulmont.testtask.exception_handler.exception.NoSuchCreditOfferException;
 import com.haulmont.testtask.models.Bank;
 import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.models.CreditOffer;
@@ -10,7 +10,6 @@ import com.haulmont.testtask.repository.CreditOfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +59,9 @@ public class CreditOfferService {
         }
         CreditOffer creditOffer = new CreditOffer(customer, credit, bank, paymentSchedule, amountOfCreditConst);
         bank.addCustomer(customer);
-        customer.addBank(bank);
         creditOffersRepository.save(creditOffer);
     }
 
-    /*округление типа float до нужного количества знаков после запятой*/
     public static float withMathRound(float value, int places) {
         double scale = Math.pow(10, places);
         return (float) (Math.round(value * scale) / scale);

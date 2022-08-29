@@ -14,7 +14,6 @@ public class CreditPaymentService {
     @Autowired
     private CreditPaymentRepository creditPaymentRepository;
 
-
     public List<CreditPayment> getCreditPaymentsList(UUID creditOfferId) {
         return creditPaymentRepository.findAllByCreditOfferId(creditOfferId);
     }

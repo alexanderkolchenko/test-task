@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -35,27 +34,15 @@ public class CreditOffersController {
 
     @GetMapping("/creditOffers")
     public String getCreditOffersPage(Model model) {
-
-
-        List<Bank> banks = bankService.getAllBanks();
-        List<Customer> customers = customerService.getAllCustomers();
-
-        //todo what is it
-        /*формирует список кредитов кождого банка отображения радио кнопок в аккордионе*/
-     /*   bankService.getAllBanks().forEach(x -> {
-            if (!x.getCredits().isEmpty()) {
-                banks.add(x);
-            }
-        });     */
-        model.addAttribute("banks", banks);
-        model.addAttribute("clients", customers);
+        model.addAttribute("banks", bankService.getAllBanks());
+        model.addAttribute("clients", customerService.getAllCustomers());
         model.addAttribute("title", "Кредитное предложение");
         return "credit_offers/credit_offers";
     }
 
     @PostMapping("/creditOffers")
     public String applyCreditOffer(@RequestParam String clientId,
-                                   @RequestParam(required = true) float amountOfCredit,
+                                   @RequestParam float amountOfCredit,
                                    @RequestParam String creditBankId,
                                    @RequestParam String startDate,
                                    @RequestParam int numberOfMonth,
@@ -70,6 +57,6 @@ public class CreditOffersController {
         Credit credit = creditService.getCredit(creditId);
         Customer customer = customerService.getCustomer(customerId);
         creditOfferService.applyCreditOffer(customer, credit, bank, amountOfCredit, interestRate, startDate, numberOfMonth);
-        return "redirect:/creditOffers";
+        return "redirect:/banks/" + bankId;
     }
 }
