@@ -1,7 +1,8 @@
 package com.haulmont.testtask.service;
 
-import com.haulmont.testtask.exception_handler.exception.NoSuchCreditException;
+import com.haulmont.testtask.exception_handler.NoSuchCreditException;
 import com.haulmont.testtask.models.Credit;
+import com.haulmont.testtask.models.CreditOffer;
 import com.haulmont.testtask.repository.CreditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

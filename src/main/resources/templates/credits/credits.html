@@ -56,14 +56,13 @@
                     <tbody>
                     <tr th:each="el:${credits}">
                         <td th:text="${credits.indexOf(el)} + 1"/>
-                        <td th:text="${el.creditLimit}"/>
-                       <!-- <td th:text="${#numbers.formatDecimal(el.interestRate, 1, 2)}"/>-->
-                        <td th:text="${el.interestRate}"/>
+                        <td th:text="${#numbers.formatInteger(el.creditLimit, 0)}"/>
+                        <td th:text="${#numbers.formatDecimal(el.interestRate,1,2,'POINT')}"/>
                         <td><a th:href="'/credits/' + ${el.id}"
                                class="btn btn-sm btn-outline-secondary">Редактировать</a></td>
                         <td>
-                            <form th:action="'/credits/' + ${el.id} + '/remove'" method="post">
-                                <button class="btn btn-sm btn-outline-danger">Удалить </button>
+                            <form th:action="'/credits/remove/' + ${el.id} " method="post">
+                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
                             </form>
                         </td>
                     </tr>

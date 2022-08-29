@@ -55,10 +55,10 @@
                                      data-bs-parent="#accordionFlushExample">
                                     <div class="accordion-body">
                                         <p class="fw-bolder">Список доступных кредитов</p>
-                                        <div class="form-check" th:each="credit:${bank.getListOfCredits()}">
+                                        <div class="form-check" th:each="credit:${bank.getCredits()}">
 
                                             <input class="form-check-input checkCredit" type="radio" checked
-                                                   name="loanSelection"
+                                                   name="creditBankId"
                                                    th:id="${credit.id} +':'+ ${bank.id}"
                                                    th:value="${credit.id} +':'+ ${bank.id}">
                                             <label class="form-check-label" th:for="${credit.id} +':'+ ${bank.id}"
@@ -75,7 +75,7 @@
                         <p class="fw-bolder px-3">Выберите клиента</p>
                         <hr class="p-0 mb-2">
                         <div class="form-check" th:each="client:${clients}">
-                            <input class="form-check-input" type="radio" name="chooseClient" checked
+                            <input class="form-check-input" type="radio" name="clientId" checked
                                    th:value="${client.id}" th:id="${client.id}">
                             <label class="form-check-label" th:for="${client.id}" th:text="${client.toString()}">
                             </label>
@@ -195,7 +195,7 @@
 <script>
 
     //вставка значений чекбокса в поля суммы кредита и процентной ставки
-    $('input[type=radio][name=loanSelection]').change(function () {
+    $('input[type=radio][name=creditBankId]').change(function () {
         var v = $(this).siblings().text().split(' руб., ');
         $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
         $('#amountOfCredit').val(v[0]);
@@ -208,8 +208,8 @@
     * при загрузке страницы
      */
     $(document).ready(function () {
-        let v = $('input[type=radio][name=loanSelection]').last().siblings().text().split(' руб., ');
-        $('#amountOfCredit').val()
+        let v = $('input[type=radio][name=creditBankId]').last().siblings().text().split(' руб., ');
+        //$('#amountOfCredit').val()
         $('#amountOfCredit').attr({"max": v[0], "placeholder": v[0]});
         $('#amountOfCredit').val(v[0]);
         $('#limitOfCredit').val(v[0]);

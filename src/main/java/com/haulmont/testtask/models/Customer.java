@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,11 +67,18 @@ public class Customer {
         this.passportNumber = passportNumber;
     }
 
-    /* Удаление банка из списка банков клиента при удалении объекта банка из БД */
-   /* public void deleteBankFromCustomer(Bank bank) {
-        this.listOfBanks.remove(bank);
-        bank.getListOfCustomers().remove(this);
-    }*/
+    public void addBank(Bank bank) {
+        if (banks == null) {
+            banks = new ArrayList<>();
+        }
+        banks.add(bank);
+    }
+
+    public void removeBank(Bank bank) {
+        if (banks != null) {
+            banks.remove(bank);
+        }
+    }
 
     public UUID getId() {
         return id;
@@ -126,6 +134,22 @@ public class Customer {
 
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
+    }
+
+    public List<Bank> getBanks() {
+        return banks;
+    }
+
+    public void setBanks(List<Bank> banks) {
+        this.banks = banks;
+    }
+
+    public List<CreditOffer> getCreditOffers() {
+        return creditOffers;
+    }
+
+    public void setCreditOffers(List<CreditOffer> creditOffers) {
+        this.creditOffers = creditOffers;
     }
 
 

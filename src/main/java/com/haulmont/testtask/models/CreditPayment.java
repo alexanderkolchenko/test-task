@@ -5,7 +5,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -58,6 +57,34 @@ public class CreditPayment {
 
     public LocalDate getDateOfPayment() {
         return dateOfPayment;
+    }
+
+    public float getPaymentOfMonth() {
+        return paymentOfMonth;
+    }
+
+    public float getPaymentOfPercentInMonth() {
+        return paymentOfPercentInMonth;
+    }
+
+    public float getPaymentOfLoanBodyInMonth() {
+        return paymentOfLoanBodyInMonth;
+    }
+
+    public void setDateOfPayment(LocalDate dateOfPayment) {
+        this.dateOfPayment = dateOfPayment;
+    }
+
+    public void setPaymentOfMonth(float paymentOfMonth) {
+        this.paymentOfMonth = paymentOfMonth;
+    }
+
+    public void setPaymentOfPercentInMonth(float paymentOfPercentInMonth) {
+        this.paymentOfPercentInMonth = paymentOfPercentInMonth;
+    }
+
+    public void setPaymentOfLoanBodyInMonth(float paymentOfLoanBodyInMonth) {
+        this.paymentOfLoanBodyInMonth = paymentOfLoanBodyInMonth;
     }
 
     public CreditOffer getCreditOffer() {

@@ -1,6 +1,6 @@
 package com.haulmont.testtask.service;
 
-import com.haulmont.testtask.exception_handler.exception.NoSuchBankException;
+import com.haulmont.testtask.exception_handler.NoSuchBankException;
 import com.haulmont.testtask.models.Bank;
 import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.repository.BankRepository;
@@ -31,6 +31,7 @@ public class BankService {
                 UUID uuid = UUID.fromString(id);
                 Credit c = creditService.getCredit(uuid);
                 bank.addCredit(c);
+                c.addBank(bank);
             }
         }
         bankRepository.save(bank);
@@ -51,7 +52,7 @@ public class BankService {
                 Credit credit = creditService.getCredit(uuid);
                 newCredits.add(credit);
                 if (!oldCredits.contains(credit)) {
-                    //credit.addBank(bank);
+                    credit.addBank(bank);
                     bank.addCredit(credit);
                 }
             }
