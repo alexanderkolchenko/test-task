@@ -64,20 +64,42 @@ public class Bank {
         credits.add(credit);
     }
 
-    /* Удаление кредита из списка кредитов банка при удалении объекта кредита из БД */
-  /*  public void deleteCreditFromBank(Credit credit) {
-        this.listOfCredits.remove(credit);
-        credit.getBanks().remove(this);
-    }*/
-
-    /* Удаление клиента из списка клиетов банка при удалении объекта клиента из БД */
- /*   public void deleteCustomerFromBank(Customer customer) {
-        this.listOfCustomers.remove(customer);
-        customer.getBanks().remove(this);
+    public void removeCredit(Credit credit) {
+        credits.remove(credit);
     }
-*/
+
+    public void addCustomer(Customer customer) {
+        if (customers == null) {
+            customers = new ArrayList<>();
+        }
+        customers.add(customer);
+    }
+
+    public void removeCustomer(Customer customer) {
+        if (customers != null) {
+            customer.removeBank(this);
+            customers.remove(customer);
+        }
+    }
+
+    public void removeCustomers() {
+        for (Customer customer : customers) {
+            customer.removeBank(this);
+        }
+        customers.clear();
+    }
+
+    public void removeCredits() {
+        for (Credit credit : credits) {
+            credit.removeBank(this);
+        }
+        credits.clear();
+    }
 
     public List<Credit> getCredits() {
+        if (credits == null) {
+            credits = new ArrayList<>();
+        }
         return credits;
     }
 
@@ -116,4 +138,5 @@ public class Bank {
     public void setCreditOffers(List<CreditOffer> creditOffers) {
         this.creditOffers = creditOffers;
     }
+
 }

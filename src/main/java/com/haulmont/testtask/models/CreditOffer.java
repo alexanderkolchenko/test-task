@@ -48,9 +48,10 @@ public class CreditOffer {
         this.customer = customer;
         this.credit = credit;
         this.bank = bank;
-        // this.paymentSchedule = paymentSchedule;
+        this.paymentSchedule = paymentSchedule;
         this.creditAmount = creditAmount;
     }
+
 
     public UUID getId() {
         return id;
@@ -90,5 +91,13 @@ public class CreditOffer {
 
     public void setCreditAmount(double creditAmount) {
         this.creditAmount = creditAmount;
+    }
+
+    public List<CreditPayment> getPaymentSchedule() {
+        return paymentSchedule;
+    }
+
+    public void setPaymentSchedule(List<CreditPayment> paymentSchedule) {
+        this.paymentSchedule = paymentSchedule;
     }
 }

@@ -72,7 +72,7 @@
                         <div th:each="credit:${credits}">
                             <div class="form-check">
                                 <input th:checked="${creditsOfBank.contains(credit)}?'checked'" class="form-check-input"
-                                       type="checkbox" th:value="${credit.id}" th:id="${credit.id}" name="idOfCredit">
+                                       type="checkbox" th:value="${credit.id}" th:id="${credit.id}" name="creditsId">
                                 <label th:text="${credit.creditLimit} + ' руб.,&nbsp' + ${credit.interestRate} + '%'"
                                        th:for="${credit.id}"
                                        class="form-check-label"/>

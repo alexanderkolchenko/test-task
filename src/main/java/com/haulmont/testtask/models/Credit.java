@@ -40,8 +40,8 @@ public class Credit {
             inverseJoinColumns = {@JoinColumn(name = "bank_id")})
     private List<Bank> banks;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "credit")
-    List<CreditOffer> creditOffers;
+    @OneToMany(mappedBy = "credit", cascade = CascadeType.ALL)
+    private List<CreditOffer> creditOffers;
 
     public Credit() {
     }
@@ -51,13 +51,6 @@ public class Credit {
         this.interestRate = interestRate;
     }
 
-    /* Удаление банка из списка банков при удалении объекта банка из БД */
-   /* public void deleteBankFromCredit(Bank bank) {
-        this.listOfBanks.remove(bank);
-        bank.getListOfCredits().remove(this);
-   }
-   */
-
     public void addBank(Bank bank) {
         if (banks == null) {
             banks = new ArrayList<>();
@@ -65,6 +58,28 @@ public class Credit {
         banks.add(bank);
     }
 
+    public void removeBank(Bank bank) {
+        banks.remove(bank);
+    }
+
+    public List<Bank> getBanks() {
+        return banks;
+    }
+
+    public void setBanks(List<Bank> banks) {
+        this.banks = banks;
+    }
+
+    public List<CreditOffer> getCreditOffers() {
+        if (creditOffers == null) {
+            creditOffers = new ArrayList<>();
+        }
+        return creditOffers;
+    }
+
+    public void setCreditOffers(List<CreditOffer> creditOffers) {
+        this.creditOffers = creditOffers;
+    }
 
     public UUID getId() {
         return id;
