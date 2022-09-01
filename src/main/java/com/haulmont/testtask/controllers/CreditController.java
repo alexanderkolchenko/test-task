@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -64,7 +63,7 @@ public class CreditController {
 
     @PostMapping("/credits/remove/{id}")
     public String deleteCredit(@PathVariable(value = "id") UUID id, Model model) {
-        creditService.removeCredit(id);
+        creditService.deleteCredit(id);
         return "redirect:/credits";
     }
 }

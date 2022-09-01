@@ -40,7 +40,7 @@ public class CustomerController {
                                     @RequestParam String email, @RequestParam String passportNumber) {
         //todo change modelattribute
         Customer customer = new Customer(surname, name, patronymic, phoneNumber, email, passportNumber);
-        customerService.saveCustomer(customer);
+        customerService.addCustomer(customer);
         return "redirect:/customers";
     }
 
@@ -69,7 +69,7 @@ public class CustomerController {
 
     @PostMapping("/customers/{id}/remove")
     public String deleteCustomer(@PathVariable(value = "id") UUID id) {
-        customerService.removeCustomer(id);
+        customerService.deleteCustomer(id);
         return "redirect:/customers";
     }
 }

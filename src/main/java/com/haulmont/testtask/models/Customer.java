@@ -152,9 +152,15 @@ public class Customer {
         this.creditOffers = creditOffers;
     }
 
-
     @Override
     public String toString() {
-        return getSurname() + " " + getName() + " " + getPatronymic();
+        return "{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", passportNumber='" + passportNumber + '\'' +
+                '}';
     }
 }

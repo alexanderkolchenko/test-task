@@ -24,15 +24,15 @@ public class CreditService {
         return creditRepository.findById(uuid).orElseThrow(() -> new NoSuchCreditException("There is no credit with id = " + uuid));
     }
 
-    public void addCredit(Credit credit) {
-        creditRepository.save(credit);
+    public Credit addCredit(Credit credit) {
+        return creditRepository.save(credit);
     }
 
     public void updateCredit(Credit credit) {
         creditRepository.save(credit);
     }
 
-    public void removeCredit(UUID uuid) {
+    public void deleteCredit(UUID uuid) {
         Credit credit = getCredit(uuid);
         creditRepository.delete(credit);
     }

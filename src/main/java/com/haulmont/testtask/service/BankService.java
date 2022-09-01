@@ -20,11 +20,15 @@ public class BankService {
     @Autowired
     private CreditService creditService;
 
+    private List<Credit> addedCredits;
+
+    private List<Credit> removedCredits;
+
     public List<Bank> getAllBanks() {
         return bankRepository.findAll();
     }
 
-    public void saveBank(Bank bank, String[] creditsId) {
+    public Bank addBank(Bank bank, String[] creditsId) {
         /* Обрабатывает массив UUID кредитов, которые пришли с чекбокса списка кредитов */
         if (creditsId != null) {
             for (String id : creditsId) {
@@ -33,14 +37,22 @@ public class BankService {
                 bank.addCredit(c);
             }
         }
-        bankRepository.save(bank);
+        return bankRepository.save(bank);
     }
 
     public Bank getBank(UUID id) {
         return bankRepository.findById(id).orElseThrow(() -> new NoSuchBankException("There is no bank with id = " + id));
     }
 
-    public void updateBank(Bank bank, String[] creditsId) {
+    public Bank updateBank(Bank bank, String[] creditsId, String nameOfBank) {
+
+        addedCredits = new ArrayList<>();
+        removedCredits = new ArrayList<>();
+
+        if (!bank.getNameOfBank().equals(nameOfBank)) {
+            bank.setNameOfBank(nameOfBank);
+        }
+
         List<Credit> oldCredits = new ArrayList<>(bank.getCredits());
         List<Credit> newCredits = new ArrayList<>();
 
@@ -53,6 +65,7 @@ public class BankService {
                 if (!oldCredits.contains(credit)) {
                     //credit.addBank(bank);
                     bank.addCredit(credit);
+                    addedCredits.add(credit);
                 }
             }
         }
@@ -61,15 +74,33 @@ public class BankService {
             if (!newCredits.contains(credit)) {
                 credit.removeBank(bank);
                 bank.removeCredit(credit);
+                removedCredits.add(credit);
             }
         }
-        bankRepository.save(bank);
+        return bankRepository.save(bank);
     }
 
-    public void removeBank(UUID id) {
+    public Bank deleteBank(UUID id) {
         Bank bank = getBank(id);
         bank.removeCustomers();
         bank.removeCredits();
         bankRepository.delete(bank);
+        return bank;
+    }
+
+    public List<Credit> getAddedCredits() {
+        return addedCredits;
+    }
+
+    public void setAddedCredits(List<Credit> addedCredits) {
+        this.addedCredits = addedCredits;
+    }
+
+    public List<Credit> getRemovedCredits() {
+        return removedCredits;
+    }
+
+    public void setRemovedCredits(List<Credit> removedCredits) {
+        this.removedCredits = removedCredits;
     }
 }

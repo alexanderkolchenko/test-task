@@ -26,15 +26,15 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public void saveCustomer(Customer customer) {
-        customerRepository.save(customer);
+    public Customer addCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
 
     public void updateCustomer(Customer customer) {
         customerRepository.save(customer);
     }
 
-    public void removeCustomer(UUID id) {
+    public void deleteCustomer(UUID id) {
         Customer customer = getCustomer(id);
         customer.getCreditOffers().forEach(x -> creditPaymentRepository.deleteByCreditOfferId(x.getId()));
         customerRepository.delete(customer);
