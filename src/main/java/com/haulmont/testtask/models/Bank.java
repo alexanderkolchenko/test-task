@@ -139,4 +139,10 @@ public class Bank {
         this.creditOffers = creditOffers;
     }
 
+    @Override
+    public String toString() {
+        return "Bank{" +
+                "nameOfBank='" + nameOfBank + '\'' +
+                '}';
+    }
 }

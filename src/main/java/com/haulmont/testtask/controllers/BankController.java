@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -62,7 +61,7 @@ public class BankController {
     public String addBank(@RequestParam(required = false) String[] creditsId,
                           @RequestParam String nameOfBank) {
         Bank bank = new Bank(nameOfBank);
-        bankService.saveBank(bank, creditsId);
+        bankService.addBank(bank, creditsId);
         return "redirect:/";
     }
 
@@ -127,16 +126,13 @@ public class BankController {
                              @RequestParam String nameOfBank, Model model) {
 
         Bank bank = bankService.getBank(id);
-        if (!bank.getNameOfBank().equals(nameOfBank)) {
-            bank.setNameOfBank(nameOfBank);
-        }
-        bankService.updateBank(bank, creditsId);
+        bankService.updateBank(bank, creditsId, nameOfBank);
         return editBank(id, model);
     }
 
     @PostMapping("/banks/remove/{id}")
     public String deleteBank(@PathVariable(value = "id") UUID id) {
-        bankService.removeBank(id);
+        bankService.deleteBank(id);
         return "redirect:/";
     }
 }
