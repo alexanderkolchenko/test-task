@@ -77,7 +77,7 @@
                         <div class="form-check" th:each="client:${clients}">
                             <input class="form-check-input" type="radio" name="clientId" checked
                                    th:value="${client.id}" th:id="${client.id}">
-                            <label class="form-check-label" th:for="${client.id}" th:text="${client.toString()}">
+                            <label class="form-check-label" th:for="${client.id}" th:text="${client.surname} + ' ' + ${client.name} + ' ' + ${client.patronymic}">
                             </label>
                         </div>
                     </div>

@@ -5,15 +5,11 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Aspect
 @ControllerAdvice
-public class CustomerLoggingAspect {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class CustomerLoggingAspect extends LoggingAspect {
 
     @AfterReturning(pointcut = "execution (public * com.haulmont.testtask.service.CustomerService.addCustomer(..))", returning = "customer")
     public void afterAddEntity(Customer customer) {
@@ -48,51 +44,27 @@ public class CustomerLoggingAspect {
             StringBuilder log = new StringBuilder();
 
             if (!oldName.equals(newCustomer.getName())) {
-                log.append("change name: previous - ")
-                        .append(oldCustomer.getName())
-                        .append(", new - ")
-                        .append(newCustomer.getName())
-                        .append(", ");
+                log.append(getTemplateString("name", oldName, newCustomer.getName()));
             }
 
             if (!oldSurname.equals(newCustomer.getSurname())) {
-                log.append("change surname: previous - ")
-                        .append(oldCustomer.getSurname())
-                        .append(", new - ")
-                        .append(newCustomer.getSurname())
-                        .append(", ");
+                log.append(getTemplateString("surname", oldSurname, newCustomer.getSurname()));
             }
 
             if (!oldPatronymic.equals(newCustomer.getPatronymic())) {
-                log.append("change patronymic: previous - ")
-                        .append(oldCustomer.getPatronymic())
-                        .append(", new - ")
-                        .append(newCustomer.getPatronymic())
-                        .append(", ");
+                log.append(getTemplateString("patronymic", oldPatronymic, newCustomer.getPatronymic()));
             }
 
             if (!oldEmail.equals(newCustomer.getEmail())) {
-                log.append("change email: previous - ")
-                        .append(oldCustomer.getEmail())
-                        .append(", new - ")
-                        .append(newCustomer.getEmail())
-                        .append(", ");
+                log.append(getTemplateString("email", oldEmail, newCustomer.getEmail()));
             }
 
             if (!oldPassportNumber.equals(newCustomer.getPassportNumber())) {
-                log.append("change passport number: previous - ")
-                        .append(oldCustomer.getPassportNumber())
-                        .append(", new - ")
-                        .append(newCustomer.getPassportNumber())
-                        .append(", ");
+                log.append(getTemplateString("passport number", oldPassportNumber, newCustomer.getPassportNumber()));
             }
 
             if (!oldPhone.equals(newCustomer.getPhoneNumber())) {
-                log.append("change phone number: previous - ")
-                        .append(oldCustomer.getPhoneNumber())
-                        .append(", new - ")
-                        .append(newCustomer.getPhoneNumber())
-                        .append(", ");
+                log.append(getTemplateString("phone number", oldPhone, newCustomer.getPhoneNumber()));
             }
 
             if (!log.toString().equals("")) {

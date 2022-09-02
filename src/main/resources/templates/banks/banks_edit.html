@@ -104,7 +104,7 @@
                             <tbody th:id="tableOfCustomers">
                             <tr th:each="co:${creditOffers}">
                                 <td th:text="${creditOffers.indexOf(co)} + 1"/>
-                                <td th:text="${co.getCustomer().toString()}"/>
+                                <td th:text="${co.getCustomer().getSurname()} + ' ' + ${co.getCustomer().getName()} + ' ' + ${co.getCustomer().getPatronymic()}"/>
                                 <td class="text-end" th:text="${co.creditAmount}"/>
                                 <td class="text-end" th:text="${#numbers.formatDecimal(co.getCredit().interestRate, 1, 2)}"/>
                                 <td class="text-end">

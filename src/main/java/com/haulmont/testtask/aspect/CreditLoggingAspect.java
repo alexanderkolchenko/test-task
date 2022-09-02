@@ -2,19 +2,16 @@ package com.haulmont.testtask.aspect;
 
 
 import com.haulmont.testtask.models.Credit;
-import com.haulmont.testtask.service.CreditOfferService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Aspect
 @ControllerAdvice
-public class CreditLoggingAspect {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class CreditLoggingAspect extends LoggingAspect {
 
     @AfterReturning(pointcut = "execution (public * com.haulmont.testtask.service.CreditService.addCredit(..))", returning = "credit")
     public void afterAddEntity(Credit credit) {
@@ -44,18 +41,10 @@ public class CreditLoggingAspect {
 
             StringBuilder log = new StringBuilder();
             if (oldCreditLimit != newCredit.getCreditLimit()) {
-                log.append("change credit limit: previous - ")
-                        .append(oldCredit.getCreditLimit())
-                        .append(", new - ")
-                        .append(newCredit.getCreditLimit())
-                        .append(", ");
+                log.append(getTemplateString("credit limit", String.valueOf(oldCreditLimit), String.valueOf(newCredit.getCreditLimit())));
             }
             if (oldInterestRate != newCredit.getInterestRate()) {
-                log.append("change interest rate: previous - ")
-                        .append(CreditOfferService.withMathRound(oldInterestRate, 2))
-                        .append(", new - ")
-                        .append(CreditOfferService.withMathRound(newCredit.getInterestRate(), 2))
-                        .append(", ");
+                log.append(getTemplateString("interest rate", String.valueOf(oldInterestRate), String.valueOf(newCredit.getInterestRate())));
             }
             if (!log.toString().equals("")) {
                 logger.info("CHANGE Credit: id " + newCredit.getId() + ", " + log.toString());
