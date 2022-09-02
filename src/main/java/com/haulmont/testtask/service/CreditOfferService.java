@@ -29,11 +29,13 @@ public class CreditOfferService {
         return creditOffersRepository.findById(id).orElseThrow(() -> new NoSuchCreditOfferException("There is no credit offer with id = " + id));
     }
 
-    public void deleteCreditOffers(UUID id) {
-        creditOffersRepository.deleteById(id);
+    public CreditOffer deleteCreditOffers(UUID id) {
+        CreditOffer creditOffer = getCreditOfferById(id);
+        creditOffersRepository.delete(creditOffer);
+        return creditOffer;
     }
 
-    public void applyCreditOffer(Customer customer, Credit credit, Bank bank, float amountOfCredit, float interestRate, String startDate, int numberOfMonth) {
+    public CreditOffer applyCreditOffer(Customer customer, Credit credit, Bank bank, float amountOfCredit, float interestRate, String startDate, int numberOfMonth) {
         float amountOfCreditConst = amountOfCredit;
         float payPercentInMonth;
         float payLoanBodyInMonth;
@@ -59,7 +61,7 @@ public class CreditOfferService {
         }
         CreditOffer creditOffer = new CreditOffer(customer, credit, bank, paymentSchedule, amountOfCreditConst);
         bank.addCustomer(customer);
-        creditOffersRepository.save(creditOffer);
+        return creditOffersRepository.save(creditOffer);
     }
 
     public static float withMathRound(float value, int places) {

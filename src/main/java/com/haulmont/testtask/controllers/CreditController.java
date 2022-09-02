@@ -55,9 +55,7 @@ public class CreditController {
     public String updateCredit(@PathVariable(value = "id") UUID id, @RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
         //todo try to redirect on save page
         Credit credit = creditService.getCredit(id);
-        credit.setCreditLimit(creditLimit);
-        credit.setInterestRate(interestRate);
-        creditService.updateCredit(credit);
+        creditService.updateCredit(credit, interestRate, creditLimit);
         return "redirect:/credits";
     }
 

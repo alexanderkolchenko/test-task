@@ -28,12 +28,15 @@ public class CreditService {
         return creditRepository.save(credit);
     }
 
-    public void updateCredit(Credit credit) {
-        creditRepository.save(credit);
+    public Credit updateCredit(Credit credit, float interestRate, int creditLimit) {
+        credit.setCreditLimit(creditLimit);
+        credit.setInterestRate(interestRate);
+        return creditRepository.save(credit);
     }
 
-    public void deleteCredit(UUID uuid) {
+    public Credit deleteCredit(UUID uuid) {
         Credit credit = getCredit(uuid);
         creditRepository.delete(credit);
+        return credit;
     }
 }

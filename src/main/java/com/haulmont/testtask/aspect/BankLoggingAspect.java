@@ -4,12 +4,16 @@ import com.haulmont.testtask.models.Bank;
 import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.service.BankService;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+
+import java.util.Arrays;
 
 
 @Aspect
@@ -31,22 +35,27 @@ public class BankLoggingAspect {
         logger.info("DELETE Bank: id - " + bank.getId() + ", " + bank.getNameOfBank());
     }
 
-    @AfterReturning(pointcut = "execution (public * com.haulmont.testtask.service.BankService.updateBank(..))", returning = "bank")
-    public void afterUpdateEntity(JoinPoint joinPoint, Bank bank) {
-        Object[] args = joinPoint.getArgs();
+    @Around("execution (public * com.haulmont.testtask.service.BankService.updateBank(..))")
+    public Bank afterUpdateEntity(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+
+        Object[] args = proceedingJoinPoint.getArgs();
         Bank oldBank = null;
+        Bank newBank = null;
+
         for (Object o : args) {
             if (o instanceof Bank) {
                 oldBank = (Bank) o;
             }
         }
         if (oldBank != null) {
+            String oldName = oldBank.getNameOfBank();
+            newBank = (Bank) proceedingJoinPoint.proceed();
             StringBuilder log = new StringBuilder();
-            if (!oldBank.getNameOfBank().equals(bank.getNameOfBank())) {
+            if (!oldName.equals(newBank.getNameOfBank())) {
                 log.append("change name: previous - ")
-                        .append(oldBank.getNameOfBank())
+                        .append(oldName)
                         .append(", new - ")
-                        .append(bank.getNameOfBank())
+                        .append(newBank.getNameOfBank())
                         .append(", ");
             }
             if (bankService.getAddedCredits() != null && bankService.getAddedCredits().size() > 0) {
@@ -56,7 +65,6 @@ public class BankLoggingAspect {
                             .append(credit.getCreditLimit())
                             .append(", ");
                 }
-
                 bankService.setAddedCredits(null);
             }
             if (bankService.getRemovedCredits() != null && bankService.getRemovedCredits().size() > 0) {
@@ -69,8 +77,9 @@ public class BankLoggingAspect {
                 bankService.setRemovedCredits(null);
             }
             if (!log.toString().equals("")) {
-                logger.info("CHANGE Bank: id " + bank.getId() + ", " + log.toString());
+                logger.info("CHANGE Bank: id " + newBank.getId() + ", " + log.toString());
             }
         }
+        return newBank;
     }
 }

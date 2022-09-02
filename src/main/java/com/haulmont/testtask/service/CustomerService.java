@@ -30,13 +30,20 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public void updateCustomer(Customer customer) {
-        customerRepository.save(customer);
+    public Customer updateCustomer(Customer customer, String name, String surname, String patronymic, String phoneNumber, String email, String passportNumber) {
+        customer.setName(name);
+        customer.setSurname(surname);
+        customer.setPatronymic(patronymic);
+        customer.setPhoneNumber(phoneNumber);
+        customer.setEmail(email);
+        customer.setPassportNumber(passportNumber);
+        return customerRepository.save(customer);
     }
 
-    public void deleteCustomer(UUID id) {
+    public Customer deleteCustomer(UUID id) {
         Customer customer = getCustomer(id);
         customer.getCreditOffers().forEach(x -> creditPaymentRepository.deleteByCreditOfferId(x.getId()));
         customerRepository.delete(customer);
+        return customer;
     }
 }

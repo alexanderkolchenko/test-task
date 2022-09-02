@@ -89,7 +89,7 @@ public class Credit {
         this.id = id;
     }
 
-    public float getCreditLimit() {
+    public int getCreditLimit() {
         return creditLimit;
     }
 
@@ -97,7 +97,7 @@ public class Credit {
         this.creditLimit = creditLimit;
     }
 
-    public double getInterestRate() {
+    public float getInterestRate() {
         return interestRate;
     }
 

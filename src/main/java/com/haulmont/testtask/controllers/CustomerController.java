@@ -57,13 +57,7 @@ public class CustomerController {
                                  @RequestParam String email, @RequestParam String passportNumber) {
         //todo modelattribute and save with add mapping
         Customer customer = customerService.getCustomer(id);
-        customer.setName(name);
-        customer.setSurname(surname);
-        customer.setPatronymic(patronymic);
-        customer.setPhoneNumber(phoneNumber);
-        customer.setEmail(email);
-        customer.setPassportNumber(passportNumber);
-        customerService.updateCustomer(customer);
+        customerService.updateCustomer(customer, name, surname, patronymic, phoneNumber, email, passportNumber);
         return "redirect:/customers";
     }
 
