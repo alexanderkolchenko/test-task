@@ -5,6 +5,8 @@ import com.haulmont.testtask.models.Bank;
 import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,15 +16,30 @@ import java.util.UUID;
 @Service
 public class BankService {
 
-    @Autowired
     private BankRepository bankRepository;
 
-    @Autowired
     private CreditService creditService;
 
     private List<Credit> addedCredits;
 
     private List<Credit> removedCredits;
+
+    public BankService() {
+    }
+
+    public BankService(BankRepository bankRepository, CreditService creditService) {
+        this.bankRepository = bankRepository;
+        this.creditService = creditService;
+    }
+
+    @Autowired
+    public void setBankRepository(BankRepository bankRepository) {
+        this.bankRepository = bankRepository;
+    }
+    @Autowired
+    public void setCreditService(CreditService creditService) {
+        this.creditService = creditService;
+    }
 
     public List<Bank> getAllBanks() {
         return bankRepository.findAll();

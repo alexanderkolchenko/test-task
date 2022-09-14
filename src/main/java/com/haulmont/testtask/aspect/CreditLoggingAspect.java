@@ -2,6 +2,7 @@ package com.haulmont.testtask.aspect;
 
 
 import com.haulmont.testtask.models.Credit;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -9,18 +10,19 @@ import org.aspectj.lang.annotation.Aspect;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
+@Slf4j
 @Aspect
 @ControllerAdvice
 public class CreditLoggingAspect extends LoggingAspect {
 
     @AfterReturning(pointcut = "execution (public * com.haulmont.testtask.service.CreditService.addCredit(..))", returning = "credit")
     public void afterAddEntity(Credit credit) {
-        logger.info("ADD Credit: " + credit.getCreditLimit() + ", " + credit.getInterestRate() + "%");
+        log.info("ADD Credit: " + credit.getCreditLimit() + ", " + credit.getInterestRate() + "%");
     }
 
     @AfterReturning(pointcut = "execution (public * com.haulmont.testtask.service.CreditService.deleteCredit(..))", returning = "credit")
     public void afterRemoveEntity(Credit credit) {
-        logger.info("DELETE Credit: id - " + credit.getId() + ", " + credit.getCreditLimit() + ", " + credit.getInterestRate());
+        log.info("DELETE Credit: id - " + credit.getId() + ", " + credit.getCreditLimit() + ", " + credit.getInterestRate());
     }
 
     @Around("execution (public * com.haulmont.testtask.service.CreditService.updateCredit(..))")
@@ -39,15 +41,15 @@ public class CreditLoggingAspect extends LoggingAspect {
 
             newCredit = (Credit) proceedingJoinPoint.proceed();
 
-            StringBuilder log = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             if (oldCreditLimit != newCredit.getCreditLimit()) {
-                log.append(getTemplateString("credit limit", String.valueOf(oldCreditLimit), String.valueOf(newCredit.getCreditLimit())));
+                sb.append(getTemplateStringForChanges("credit limit", String.valueOf(oldCreditLimit), String.valueOf(newCredit.getCreditLimit())));
             }
             if (oldInterestRate != newCredit.getInterestRate()) {
-                log.append(getTemplateString("interest rate", String.valueOf(oldInterestRate), String.valueOf(newCredit.getInterestRate())));
+                sb.append(getTemplateStringForChanges("interest rate", String.valueOf(oldInterestRate), String.valueOf(newCredit.getInterestRate())));
             }
-            if (!log.toString().equals("")) {
-                logger.info("CHANGE Credit: id " + newCredit.getId() + ", " + log.toString());
+            if (!sb.toString().equals("")) {
+                log.info("CHANGE Credit: id " + newCredit.getId() + ", " + sb.toString());
             }
         }
         return newCredit;
