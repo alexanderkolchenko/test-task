@@ -12,9 +12,11 @@ import java.util.UUID;
 @Service
 public class CreditService {
 
-    @Autowired
-    private CreditRepository creditRepository;
+    private final CreditRepository creditRepository;
 
+    public CreditService(CreditRepository creditRepository) {
+        this.creditRepository = creditRepository;
+    }
 
     public List<Credit> getAllCredits() {
         return creditRepository.findAll();

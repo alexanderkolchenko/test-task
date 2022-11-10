@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -144,5 +145,18 @@ public class Bank {
         return "Bank{" +
                 "nameOfBank='" + nameOfBank + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bank)) return false;
+        Bank bank = (Bank) o;
+        return Objects.equals(id, bank.id) && Objects.equals(nameOfBank, bank.nameOfBank) && Objects.equals(credits, bank.credits) && Objects.equals(customers, bank.customers) && Objects.equals(creditOffers, bank.creditOffers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameOfBank, credits, customers, creditOffers);
     }
 }
