@@ -32,7 +32,7 @@
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 th:text="${title}" class="h2"/>
                 <div class="btn-toolbar mb-2 mb-md-0 mx-5">
-                    <a href="/banks/add" type="button" class="btn btn-sm btn-outline-secondary">
+                    <a href="/banks/add" type="button" class="btn btn-sm btn-outline-secondary" th:if="${#authorization.expression('hasAuthority(''SUPERUSER'')')}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-plus-lg" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -63,10 +63,10 @@
 
                         <td><a th:href="'/banks/' + ${bank.id}"
                                class="btn btn-sm btn-outline-secondary">Информация о банке</a></td>
-                        <td><a th:href="'/banks/edit/' + ${bank.id}"
+                        <td><a th:href="'/banks/edit/' + ${bank.id}" th:if="${#authorization.expression('hasAuthority(''SUPERUSER'')')}"
                                class="btn btn-sm btn-outline-secondary">Редактировать</a></td>
                         <td>
-                            <form th:action="'/banks/remove/' + ${bank.id}" method="post">
+                            <form th:action="'/banks/remove/' + ${bank.id}" method="post" th:if="${#authorization.expression('hasAuthority(''SUPERUSER'')')}">
                                 <button class="btn btn-sm btn-outline-danger">Удалить банк </button>
                             </form>
                         </td>

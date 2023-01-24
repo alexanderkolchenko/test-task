@@ -4,6 +4,7 @@ import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.service.CreditOfferService;
 import com.haulmont.testtask.service.CreditService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +28,14 @@ public class CreditController {
     }
 
     @GetMapping("/credits/add")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String addCreditsPage(Model model) {
         model.addAttribute("title", "Добавить кредит");
         return "credits/credits_add";
     }
 
     @PostMapping("/credits/add")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String addCredit(@RequestParam int creditLimit, @RequestParam float interestRate) {
         interestRate = CreditOfferService.withMathRound(interestRate, 2);
         Credit credit = new Credit(creditLimit, interestRate);
@@ -41,6 +44,7 @@ public class CreditController {
     }
 
     @GetMapping("/credits/{id}")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String editCreditPage(@PathVariable(value = "id") UUID id, Model model) {
         Credit credit = creditService.getCredit(id);
         if (credit == null) {
@@ -52,7 +56,11 @@ public class CreditController {
     }
 
     @PostMapping("/credits/{id}")
-    public String updateCredit(@PathVariable(value = "id") UUID id, @RequestParam int creditLimit, @RequestParam float interestRate, Model model) {
+    @PreAuthorize("hasAuthority('SUPERUSER')")
+    public String updateCredit(@PathVariable(value = "id") UUID id,
+                               @RequestParam int creditLimit,
+                               @RequestParam float interestRate,
+                               Model model) {
         //todo try to redirect on save page
         Credit credit = creditService.getCredit(id);
         creditService.updateCredit(credit, interestRate, creditLimit);
@@ -60,6 +68,7 @@ public class CreditController {
     }
 
     @PostMapping("/credits/remove/{id}")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String deleteCredit(@PathVariable(value = "id") UUID id, Model model) {
         creditService.deleteCredit(id);
         return "redirect:/credits";

@@ -4,12 +4,15 @@ import com.haulmont.testtask.models.Bank;
 import com.haulmont.testtask.models.Credit;
 import com.haulmont.testtask.models.CreditPayment;
 import com.haulmont.testtask.models.Customer;
+import com.haulmont.testtask.models.User;
 import com.haulmont.testtask.service.BankService;
 import com.haulmont.testtask.service.CreditOfferService;
 import com.haulmont.testtask.service.CreditPaymentService;
 import com.haulmont.testtask.service.CreditService;
 import com.haulmont.testtask.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +45,7 @@ public class BankController {
 
 
     @GetMapping("/")
+   // @PreAuthorize("hasRole('ROLE_SUPERUSER')")
     public String getListOfBanks(Model model) {
         List<Bank> banks = bankService.getAllBanks();
         model.addAttribute("banks", banks);
@@ -50,6 +54,7 @@ public class BankController {
     }
 
     @GetMapping("/banks/add")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String getAddBankPage(Model model) {
         model.addAttribute("title", "Добавить банк");
         List<Credit> credits = creditService.getAllCredits();
@@ -58,6 +63,7 @@ public class BankController {
     }
 
     @PostMapping("/banks/add")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String addBank(@RequestParam(required = false) String[] creditsId,
                           @RequestParam String nameOfBank) {
         Bank bank = new Bank(nameOfBank);
@@ -100,6 +106,7 @@ public class BankController {
     }
 
     @GetMapping("/banks/edit/{id}")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String editBank(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankService.getBank(id);
         List<Credit> credits = creditService.getAllCredits();
@@ -114,6 +121,7 @@ public class BankController {
     }
 
     @PostMapping("/banks/edit/{id}/{bank_id}/remove_credit_offer")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String deleteCreditOffersFromBank(@PathVariable(value = "id") UUID id, @PathVariable(value = "bank_id") UUID bank_id, Model model) {
         creditOfferService.deleteCreditOffers(id);
         //todo return to edit page
@@ -121,6 +129,7 @@ public class BankController {
     }
 
     @PostMapping("/banks/edit/{id}")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String updateBank(@PathVariable(value = "id", required = false) UUID id,
                              @RequestParam(required = false) String[] creditsId,
                              @RequestParam String nameOfBank, Model model) {
@@ -131,6 +140,7 @@ public class BankController {
     }
 
     @PostMapping("/banks/remove/{id}")
+    @PreAuthorize("hasAuthority('SUPERUSER')")
     public String deleteBank(@PathVariable(value = "id") UUID id) {
         bankService.deleteBank(id);
         return "redirect:/";
