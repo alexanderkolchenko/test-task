@@ -97,21 +97,21 @@
         <appender-ref ref="Console" />
     </root>
 
-    <logger name="com.haulmont.testtask.aspect.BankLoggingAspect" level="info" additivity="false">
+    <logger name="com.aptech.diplom.aspect.BankLoggingAspect" level="info" additivity="false">
         <appender-ref ref="BankRollingFile" />
         <appender-ref ref="Console" />
     </logger>
-    <logger name="com.haulmont.testtask.aspect.CustomerLoggingAspect" level="info" additivity="false">
+    <logger name="com.aptech.diplom.aspect.CustomerLoggingAspect" level="info" additivity="false">
         <appender-ref ref="CustomerRollingFile" />
         <appender-ref ref="Console" />
     </logger>
 
-    <logger name="com.haulmont.testtask.aspect.CreditOfferLoggingAspect" level="info" additivity="false">
+    <logger name="com.aptech.diplom.aspect.CreditOfferLoggingAspect" level="info" additivity="false">
         <appender-ref ref="CreditOfferRollingFile" />
         <appender-ref ref="Console" />
     </logger>
 
-    <logger name="com.haulmont.testtask.aspect.CreditLoggingAspect" level="info" additivity="false">
+    <logger name="com.aptech.diplom.aspect.CreditLoggingAspect" level="info" additivity="false">
         <appender-ref ref="CreditRollingFile" />
         <appender-ref ref="Console" />
     </logger>
