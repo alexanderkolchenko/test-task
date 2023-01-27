@@ -56,25 +56,25 @@ VALUES ('d3b00ac8-a533-4a5a-89cb-c2d7b6a4a0c0', 1500000, 9.5);
 
 /*банки*/
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('07dc98c8-48cc-4ef8-80c3-92bd0a433c64', 'Сити');
+VALUES ('07dc98c8-48cc-4ef8-80c3-92bd0a433c64', 'Филиал «Московский»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('1b77c6a0-1d17-41b9-acaf-349ce92f454a', 'ВТБ');
+VALUES ('1b77c6a0-1d17-41b9-acaf-349ce92f454a', 'Филиал «Поволжкий»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('267b950a-b4e6-4f27-9fc1-a1fd5968ede3', 'Альфа-банк');
+VALUES ('267b950a-b4e6-4f27-9fc1-a1fd5968ede3', 'Филиал «Московский»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('2dd9e36c-5d45-41c3-9521-7cd8cea46135', 'ПочтаБанк');
+VALUES ('2dd9e36c-5d45-41c3-9521-7cd8cea46135', 'ДО «Кировский»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('3ce3da78-b82f-45f5-8357-ee1051a53a8d', 'Тинькофф');
+VALUES ('3ce3da78-b82f-45f5-8357-ee1051a53a8d', 'ДО «Ленинский»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('8ec59ba6-b110-4c01-bbf2-87878767131d', 'Открытие');
+VALUES ('8ec59ba6-b110-4c01-bbf2-87878767131d', 'ДО «Фрунзенский»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('92a18191-37f9-4e7c-98dc-44bc6b726952', 'Локо');
+VALUES ('92a18191-37f9-4e7c-98dc-44bc6b726952', 'Филиал «Саратовкий»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('a2e5d288-9da8-4ea1-92a8-077dbcfbb752', 'ЮниКредит');
+VALUES ('a2e5d288-9da8-4ea1-92a8-077dbcfbb752', 'Филиал «Волгоградский»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('a41d544f-b184-4eab-904d-810e7ac37173', 'Сбербанк');
+VALUES ('a41d544f-b184-4eab-904d-810e7ac37173', 'ДО «Парк Победы»');
 INSERT INTO PUBLIC.BANKS (ID, NAME_OF_BANK)
-VALUES ('d5c6996f-8249-49f5-b1a4-977246a7aa44', 'ГазпромБанк');
+VALUES ('d5c6996f-8249-49f5-b1a4-977246a7aa44', 'ДО «На Проспекте»');
 
 
 /*банки - кредиты*/

@@ -1,6 +1,5 @@
 package com.haulmont.testtask.config;
 
-import com.haulmont.testtask.aspect.LoginLoggingAspect;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

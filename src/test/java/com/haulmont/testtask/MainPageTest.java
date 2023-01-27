@@ -1,7 +1,7 @@
 package com.haulmont.testtask;
 
 import com.haulmont.testtask.controllers.BankController;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +16,6 @@ import static org.hamcrest.Matchers.containsString;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//todo @WithUserDetails
 public class MainPageTest {
 
     @Autowired
@@ -32,24 +31,4 @@ public class MainPageTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Банки")));
     }
-
-    //todo
-    @Test
-    @org.junit.Ignore
-    public void content_username(){}
-
-    //todo
-    @Test
-    @Ignore
-    public void redirect(){}
-
-    //todo
-    @Test
-    @Ignore
-    public void login_correct(){}
-
-    //todo
-    @Test
-    @Ignore
-    public void login_incorrect(){}
 }
