@@ -27,4 +27,14 @@ public class BankRepositoryTest {
         assertNotNull(bank);
         assertEquals(UUID.fromString(String.valueOf(bank.getId())), bank.getId());
     }
+
+    @Test
+    public void whenRemoveBank_CustomersNotRemoved() {
+
+    }
+
+    @Test
+    public void whenRemoveBank_CreditsNotRemoved() {
+
+    }
 }

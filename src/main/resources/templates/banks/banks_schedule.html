@@ -75,7 +75,7 @@
                             <tbody>
                             <tr th:each="co:${creditOffers}">
                                 <td th:text="${creditOffers.indexOf(co)} + 1"/>
-                                <td th:text="${co.getCustomer().toString()}"/>
+                                <td th:text="${co.getCustomer().getSurname()} + ' ' + ${co.getCustomer().getName()} + ' ' + ${co.getCustomer().getPatronymic()}"/>
                                 <td class="text-end" th:id="creditAmount + ${creditOffers.indexOf(co)}" th:text="${co.creditAmount}"/>
                                 <td class="text-end" th:text="${co.getCredit().interestRate}"/>
                                 <td class="text-end">
@@ -103,7 +103,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td  class="col-4 fw-normal fs-5" th:text="${customer.toString()}"></td>
+                        <td  class="col-4 fw-normal fs-5" th:text="${customer.surname + ' ' + customer.name + ' ' + customer.patronymic}"></td>
                         <td id="total" class="col-3 fw-normal fs-5"></td>
                         <td id="overpayment" class="col-3 fw-normal fs-5"></td>
                     </tr>

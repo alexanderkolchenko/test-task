@@ -1,31 +1,36 @@
 package com.aptech.diplom.aspect;
 
 import com.aptech.diplom.models.Customer;
+import com.aptech.diplom.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Slf4j
 @Aspect
 @ControllerAdvice
-public class CustomerLoggingAspect extends LoggingAspect {
+public class CustomerLoggingAspect extends LoggingAspect<Customer> {
 
     @AfterReturning(pointcut = "execution (public * com.aptech.diplom.service.CustomerService.addCustomer(..))", returning = "customer")
-    public void afterAddEntity(Customer customer) {
-        log.info("ADD Customer: " + customer.toString());
+    public void afterCreateEntity(Customer customer) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info(user.getUsername() + ": " + "ADD Customer: " + customer.toString());
     }
+
 
     @AfterReturning(pointcut = "execution (public * com.aptech.diplom.service.CustomerService.deleteCustomer(..))", returning = "customer")
     public void afterRemoveEntity(Customer customer) {
-        log.info("DELETE Customer: id - " + customer.getId() + ", " + customer.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info(user.getUsername() + ": " + "DELETE Customer: id - " + customer.getId() + ", " + customer.toString());
     }
 
     @Around("execution (public * com.aptech.diplom.service.CustomerService.updateCustomer(..))")
     public Customer afterUpdateEntity(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Object[] args = proceedingJoinPoint.getArgs();
         Customer oldCustomer = null;
         Customer newCustomer = null;
@@ -70,7 +75,7 @@ public class CustomerLoggingAspect extends LoggingAspect {
             }
 
             if (!sb.toString().equals("")) {
-                log.info("CHANGE Customer: id " + newCustomer.getId() + ", " + sb.toString());
+                log.info(user.getUsername() + ": " + "CHANGE Customer: id " + newCustomer.getId() + ", " + sb.toString());
             }
         }
         return newCustomer;

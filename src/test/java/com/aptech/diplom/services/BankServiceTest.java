@@ -42,7 +42,7 @@ public class BankServiceTest {
     private CreditService creditService;
 
     @Test
-    public void updateBankTest() {
+    public void updateBank_ChangeCreditList_And_Name() {
         String[] credits = new String[] {"1f0d9e4c-9e15-11ed-a8fc-0242ac120002", "244c27c0-9e15-11ed-a8fc-0242ac120002"};
         Bank oldBank = new Bank();
         oldBank.setNameOfBank("testBank");

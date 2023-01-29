@@ -1,6 +1,8 @@
 package com.aptech.diplom.config;
 
 import com.aptech.diplom.models.User;
+import com.aptech.diplom.models.UserRole;
+import com.aptech.diplom.models.UserRoles;
 import com.aptech.diplom.repository.auth.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -35,7 +38,8 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .antMatchers("/", "/**").access("hasRole('ROLE_USER')")
 //                .antMatchers("/banks/**").access("hasRole('ROLE_SUPERUSER')")
-                .antMatchers("/", "/login").permitAll()
+                .antMatchers("/", "/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -50,7 +54,7 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
 //                .and()
 //                .rememberMe().key("secret").tokenValiditySeconds(86400)
-                .and()
+                .and().csrf().disable()
                 .build();
     }
 }

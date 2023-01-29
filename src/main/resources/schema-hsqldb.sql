@@ -45,8 +45,7 @@ create table if not exists credits
 create table if not exists credit_banks
 (
     credit_id UUID not null,
-    bank_id   UUID not null,
-    primary key (credit_id, bank_id)
+    bank_id   UUID not null
 );
 
 create table if not exists credit_payments
@@ -62,8 +61,7 @@ create table if not exists credit_payments
 create table if not exists customer_banks
 (
     customer_id UUID not null,
-    bank_id     UUID not null,
-    primary key (customer_id, bank_id)
+    bank_id     UUID not null
 );
 
 create table if not exists users
@@ -84,8 +82,7 @@ create table if not exists roles
 create table if not exists users_roles
 (
     user_id bigint not null,
-    role_id bigint not null,
-    primary key (user_id, role_id)
+    role_id bigint not null
 );
 
 alter table users_roles
