@@ -14,16 +14,6 @@ Test Task
 удалить оформленый кредит можно во вкладке "Банк" -> Редактировать банк
 
 
-
-
-https://github.com/alexanderkolchenko/test-task/tree/main/src/main/java/com/haulmont/testtask
-
-файлы БД:
-https://github.com/alexanderkolchenko/test-task/tree/main/src/main/resources/db
-
-скрипт БД:
-https://github.com/alexanderkolchenko/test-task/blob/main/src/main/resources/db/create_db.sql
-
 JDK 8, Maven 3, Spring-Boot, Jetty Server
 
 Build and Run in the command line:<br>
