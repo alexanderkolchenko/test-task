@@ -58,7 +58,7 @@
                     <tbody>
                     <tr th:each="bank:${banks}">
                         <td th:text="${banks.indexOf(bank)} + 1"/>
-                        <td th:text="${bank.nameOfBank}"/>
+                        <td th:text="${bank.name}"/>
                         <td></td>
 
                         <td><a th:href="'/banks/' + ${bank.id}"

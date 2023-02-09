@@ -20,5 +20,10 @@ Build and Run in the command line:<br>
 mvn package<br>
 mvn spring-boot:run
 
-Open http://localhost:8080 in a web browser.
+Приложение запустится со 
+
+Открыть http://localhost:8080 в браузере
+Пользователи:   admin/admin c ролью SUPERUSER
+                user/user c ролью USER
+
 

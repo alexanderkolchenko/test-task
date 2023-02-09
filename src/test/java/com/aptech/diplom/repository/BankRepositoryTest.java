@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,20 +20,30 @@ public class BankRepositoryTest {
     @Autowired
     private BankRepository bankRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private CreditRepository creditRepository;
+
     @Test
-    public void should_Add_Bank() throws Exception {
+    public void should_Add_Bank() {
         Bank bank = bankRepository.save(new Bank("SPB"));
         assertNotNull(bank);
-        assertEquals(UUID.fromString(String.valueOf(bank.getId())), bank.getId());
+        assertEquals(11, bankRepository.findAll().size());
     }
 
     @Test
     public void whenRemoveBank_CustomersNotRemoved() {
-
+        Bank bank = bankRepository.findAll().stream().findFirst().get();
+        bankRepository.delete(bank);
+        assertEquals(10, customerRepository.findAll().size());
     }
 
     @Test
     public void whenRemoveBank_CreditsNotRemoved() {
-
+        Bank bank = bankRepository.findAll().stream().findFirst().get();
+        bankRepository.delete(bank);
+        assertEquals(10, creditRepository.findAll().size());
     }
 }

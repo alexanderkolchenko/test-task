@@ -19,7 +19,7 @@ public class CreditOfferLoggingAspect extends LoggingAspect<CreditOffer>{
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info(user.getUsername() + ": " + "ADD Credit Offer:" +
                 " customer - " + creditOffer.getCustomer().getName() + " " + creditOffer.getCustomer().getSurname() +
-                ", bank - " + creditOffer.getBank().getNameOfBank() +
+                ", bank - " + creditOffer.getBank().getName() +
                 ", credit - " + creditOffer.getCredit().getInterestRate() + ", " + creditOffer.getCreditAmount());
     }
 
@@ -28,7 +28,7 @@ public class CreditOfferLoggingAspect extends LoggingAspect<CreditOffer>{
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info(user.getUsername() + ": " + "DELETE Credit Offer: " +
                 " customer - " + creditOffer.getCustomer().getName() + " " + creditOffer.getCustomer().getSurname() +
-                ", bank - " + creditOffer.getBank().getNameOfBank() +
+                ", bank - " + creditOffer.getBank().getName() +
                 ", credit - " + creditOffer.getCreditAmount() + ", " + creditOffer.getCredit().getInterestRate() + " %");
     }
 }

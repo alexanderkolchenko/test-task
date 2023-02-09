@@ -27,13 +27,13 @@ public class BankLoggingAspect extends LoggingAspect<Bank> {
     @AfterReturning(pointcut = "execution (public * com.aptech.diplom.service.BankService.addBank(..))", returning = "bank")
     public void afterCreateEntity(Bank bank) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info(user.getUsername() + ": " + "ADD Bank: " + bank.getNameOfBank());
+        log.info(user.getUsername() + ": " + "ADD Bank: " + bank.getName());
     }
 
     @AfterReturning(pointcut = "execution (public * com.aptech.diplom.service.BankService.deleteBank(..))", returning = "bank")
     public void afterRemoveEntity(Bank bank) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info(user.getUsername() + ": " + "DELETE Bank: id - " + bank.getId() + ", " + bank.getNameOfBank());
+        log.info(user.getUsername() + ": " + "DELETE Bank: id - " + bank.getId() + ", " + bank.getName());
     }
 
     @Around("execution (public * com.aptech.diplom.service.BankService.updateBank(..))")
@@ -50,13 +50,13 @@ public class BankLoggingAspect extends LoggingAspect<Bank> {
             }
         }
         if (oldBank != null) {
-            String oldName = oldBank.getNameOfBank();
+            String oldName = oldBank.getName();
 
             newBank = (Bank) proceedingJoinPoint.proceed();
 
             StringBuilder sb = new StringBuilder();
-            if (!oldName.equals(newBank.getNameOfBank())) {
-                sb.append(getTemplateStringForChanges("name", oldName, newBank.getNameOfBank()));
+            if (!oldName.equals(newBank.getName())) {
+                sb.append(getTemplateStringForChanges("name", oldName, newBank.getName()));
             }
             if (bankService.getAddedCredits() != null && bankService.getAddedCredits().size() > 0) {
                 sb.append(" added credits - ");

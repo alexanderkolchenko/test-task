@@ -1,5 +1,6 @@
 package com.aptech.diplom.models;
 
+import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.CascadeType;
@@ -34,7 +35,7 @@ public class Customer {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "")
+    @Column(name = "patronymic")
     private String patronymic;
 
     @Column(name = "phone_number")
@@ -58,6 +59,7 @@ public class Customer {
     public Customer() {
     }
 
+    @Builder
     public Customer(String surname, String name, String patronymic, String phoneNumber, String email, String passportNumber) {
         this.surname = surname;
         this.name = name;

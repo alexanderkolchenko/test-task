@@ -37,7 +37,14 @@ public class CreditOfferService {
         return creditOffer;
     }
 
-    public CreditOffer applyCreditOffer(Customer customer, Credit credit, Bank bank, float amountOfCredit, float interestRate, String startDate, int numberOfMonth) {
+    public CreditOffer create() {
+        return new CreditOffer();
+    }
+
+    public CreditOffer applyCreditOffer(Customer customer, Credit credit, Bank bank,
+                                        float amountOfCredit,
+                                        float interestRate, String startDate,
+                                        int numberOfMonth) {
         float amountOfCreditConst = amountOfCredit;
         float payPercentInMonth;
         float payLoanBodyInMonth;
@@ -61,9 +68,15 @@ public class CreditOfferService {
             paymentSchedule.add(creditPayment);
             amountOfCredit -= payLoanBodyInMonth;
         }
-        CreditOffer creditOffer = new CreditOffer(customer, credit, bank, paymentSchedule, amountOfCreditConst);
+        CreditOffer co = create();
+        co.setCustomer(customer);
+        co.setCredit(credit);
+        co.setBank(bank);
+        co.setPaymentSchedule(paymentSchedule);
+        co.setCreditAmount(amountOfCreditConst);
+        //CreditOffer creditOffer = new CreditOffer(customer, credit, bank, paymentSchedule, amountOfCreditConst);
         bank.addCustomer(customer);
-        return creditOffersRepository.save(creditOffer);
+        return creditOffersRepository.save(co);
     }
 
     public static float withMathRound(float value, int places) {

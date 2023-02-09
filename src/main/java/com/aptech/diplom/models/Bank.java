@@ -30,7 +30,7 @@ public class Bank {
     private UUID id;
 
     @Column(name = "name_of_bank")
-    private String nameOfBank;
+    private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
@@ -55,7 +55,7 @@ public class Bank {
     }
 
     public Bank(String nameOfBank) {
-        this.nameOfBank = nameOfBank;
+        this.name = nameOfBank;
     }
 
     public void addCredit(Credit credit) {
@@ -124,12 +124,12 @@ public class Bank {
         this.id = id;
     }
 
-    public String getNameOfBank() {
-        return nameOfBank;
+    public String getName() {
+        return name;
     }
 
-    public void setNameOfBank(String nameOfBank) {
-        this.nameOfBank = nameOfBank;
+    public void setName(String nameOfBank) {
+        this.name = nameOfBank;
     }
 
     public List<CreditOffer> getCreditOffers() {
@@ -143,7 +143,7 @@ public class Bank {
     @Override
     public String toString() {
         return "Bank{" +
-                "nameOfBank='" + nameOfBank + '\'' +
+                "nameOfBank='" + name + '\'' +
                 '}';
     }
 
@@ -152,11 +152,11 @@ public class Bank {
         if (this == o) return true;
         if (!(o instanceof Bank)) return false;
         Bank bank = (Bank) o;
-        return Objects.equals(id, bank.id) && Objects.equals(nameOfBank, bank.nameOfBank) && Objects.equals(credits, bank.credits) && Objects.equals(customers, bank.customers) && Objects.equals(creditOffers, bank.creditOffers);
+        return Objects.equals(id, bank.id) && Objects.equals(name, bank.name) && Objects.equals(credits, bank.credits) && Objects.equals(customers, bank.customers) && Objects.equals(creditOffers, bank.creditOffers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameOfBank, credits, customers, creditOffers);
+        return Objects.hash(id, name, credits, customers, creditOffers);
     }
 }

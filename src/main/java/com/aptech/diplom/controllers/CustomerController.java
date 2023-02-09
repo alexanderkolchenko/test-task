@@ -4,7 +4,6 @@ package com.aptech.diplom.controllers;
 import com.aptech.diplom.models.Customer;
 import com.aptech.diplom.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +38,6 @@ public class CustomerController {
     public String addCustomerSubmit(@RequestParam String name, @RequestParam String surname,
                                     @RequestParam String patronymic, @RequestParam String phoneNumber,
                                     @RequestParam String email, @RequestParam String passportNumber) {
-        //todo change modelattribute
         Customer customer = new Customer(surname, name, patronymic, phoneNumber, email, passportNumber);
         customerService.addCustomer(customer);
         return "redirect:/customers";
@@ -56,7 +54,6 @@ public class CustomerController {
     public String updateCustomer(@PathVariable(value = "id") UUID id, @RequestParam String name, @RequestParam String surname,
                                  @RequestParam String patronymic, @RequestParam String phoneNumber,
                                  @RequestParam String email, @RequestParam String passportNumber) {
-        //todo modelattribute and save with add mapping
         Customer customer = customerService.getCustomer(id);
         customerService.updateCustomer(customer, name, surname, patronymic, phoneNumber, email, passportNumber);
         return "redirect:/customers";

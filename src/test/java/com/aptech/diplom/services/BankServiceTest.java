@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.*;
 
 
@@ -45,19 +45,16 @@ public class BankServiceTest {
     public void updateBank_ChangeCreditList_And_Name() {
         String[] credits = new String[] {"1f0d9e4c-9e15-11ed-a8fc-0242ac120002", "244c27c0-9e15-11ed-a8fc-0242ac120002"};
         Bank oldBank = new Bank();
-        oldBank.setNameOfBank("testBank");
+        oldBank.setName("testBank");
         Credit c1 = new Credit(5000, 1);
         Credit c2 = new Credit(5000, 1);
         c1.setId(UUID.fromString("87f72b1c-9e15-11ed-a8fc-0242ac120002"));
         c2.setId(UUID.fromString("bafe9194-9e15-11ed-a8fc-0242ac120002"));
         c1.addBank(oldBank);
-        List<Credit> creditList = new ArrayList<Credit>();
+        List<Credit> creditList = new ArrayList<>();
         creditList.add(c1);
         oldBank.setCredits(creditList);
 
-        CreditService mock = mock(CreditService.class);
-        Credit creditMock = mock(Credit.class);
-        mock(BankRepository.class);
         when(creditService.getCredit(c1.getId())).thenReturn(c1);
         when(creditService.getCredit(c2.getId())).thenReturn(c2);
         when(bankRepository.save(oldBank)).thenReturn(oldBank);
@@ -65,10 +62,10 @@ public class BankServiceTest {
         Bank newBank = testBankService.updateBank(oldBank, credits, "newNameOfBank");
 
         Bank testBank = new Bank();
-        testBank.setNameOfBank("newNameOfBank");
+        testBank.setName("newNameOfBank");
         testBank.addCredit(c1);
         testBank.addCredit(c2);
-        Assertions.assertEquals(newBank.getNameOfBank(), testBank.getNameOfBank());
+        Assertions.assertEquals(newBank.getName(), testBank.getName());
         Assertions.assertEquals(newBank.getCredits().size(), testBank.getCredits().size());
     }
 }

@@ -1,9 +1,8 @@
 package com.aptech.diplom.config;
 
 import com.aptech.diplom.models.User;
-import com.aptech.diplom.models.UserRole;
-import com.aptech.diplom.models.UserRoles;
 import com.aptech.diplom.repository.auth.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,16 +35,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+        return http.csrf().disable()
                 .authorizeRequests()
-//                .antMatchers("/", "/**").access("hasRole('ROLE_USER')")
-//                .antMatchers("/banks/**").access("hasRole('ROLE_SUPERUSER')")
-                .antMatchers("/", "/**").permitAll()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/js/*").permitAll()
+                .antMatchers("/banks/**", "/credits/**", "/creditOffers", "/customers/**").access("hasAuthority('USER') or hasAuthority('SUPERUSER')")
+                .antMatchers( "/admin/**").access("hasAuthority('SUPERUSER')")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-//                .loginProcessingUrl("/authenticate")
+                .permitAll()
+                //.loginProcessingUrl("/authentication")
 //                .usernameParameter("user")
 //                .passwordParameter("pwd")
                 .defaultSuccessUrl("/")
@@ -52,9 +55,14 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-//                .and()
-//                .rememberMe().key("secret").tokenValiditySeconds(86400)
-                .and().csrf().disable()
+                .and()
+                .rememberMe()
+                .key("secret")
+                .rememberMeCookieName("remember")
+                .rememberMeParameter("remember-me")
+                .tokenValiditySeconds(86400)
+                .userDetailsService(userDetailsService(userRepository))
+                .and()
                 .build();
     }
 }

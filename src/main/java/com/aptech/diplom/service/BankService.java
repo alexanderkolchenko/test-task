@@ -64,8 +64,8 @@ public class BankService {
         addedCredits = new ArrayList<>();
         removedCredits = new ArrayList<>();
 
-        if (!bank.getNameOfBank().equals(nameOfBank)) {
-            bank.setNameOfBank(nameOfBank);
+        if (!bank.getName().equals(nameOfBank)) {
+            bank.setName(nameOfBank);
         }
 
         List<Credit> oldCredits = new ArrayList<>(bank.getCredits());

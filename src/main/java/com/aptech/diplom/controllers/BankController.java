@@ -72,12 +72,11 @@ public class BankController {
     @GetMapping("/banks/{id}")
     public String showBankDetails(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankService.getBank(id);
-        //todo try add only bank with eager
         model.addAttribute("credits", bank.getCredits());
         model.addAttribute("bank", bank);
         model.addAttribute("customers", bank.getCustomers());
         model.addAttribute("creditOffers", bank.getCreditOffers());
-        model.addAttribute("title", bank.getNameOfBank());
+        model.addAttribute("title", bank.getName());
         return "banks/banks_details";
     }
 
@@ -99,7 +98,7 @@ public class BankController {
         model.addAttribute("creditOffers", bank.getCreditOffers());
         model.addAttribute("creditPayments", creditPayments);
         model.addAttribute("customer", customer);
-        model.addAttribute("title", bank.getNameOfBank());
+        model.addAttribute("title", bank.getName());
         return "banks/banks_schedule";
     }
 
@@ -108,13 +107,12 @@ public class BankController {
     public String editBank(@PathVariable(value = "id") UUID id, Model model) {
         Bank bank = bankService.getBank(id);
         List<Credit> credits = creditService.getAllCredits();
-        //todo try add only bank with eager
         model.addAttribute("credits", credits);
         model.addAttribute("creditsOfBank", bank.getCredits());
         model.addAttribute("creditOffers", bank.getCreditOffers());
         model.addAttribute("bank", bank);
         model.addAttribute("customers", bank.getCustomers());
-        model.addAttribute("title", "Редактирование банка: " + bank.getNameOfBank());
+        model.addAttribute("title", "Редактирование банка: " + bank.getName());
         return "/banks/banks_edit";
     }
 
@@ -122,7 +120,6 @@ public class BankController {
     @PreAuthorize("hasAuthority('SUPERUSER')")
     public String deleteCreditOffersFromBank(@PathVariable(value = "id") UUID id, @PathVariable(value = "bank_id") UUID bank_id, Model model) {
         creditOfferService.deleteCreditOffers(id);
-        //todo return to edit page
         return editBank(bank_id, model);
     }
 

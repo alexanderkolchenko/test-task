@@ -47,7 +47,6 @@ public class CreditOffersController {
                                    @RequestParam String startDate,
                                    @RequestParam int numberOfMonth,
                                    @RequestParam(required = false) float interestRate) {
-        //todo try to use modelattribute
         String[] ids = creditBankId.split(":");
         UUID customerId = UUID.fromString(clientId);
         UUID creditId = UUID.fromString(ids[0]);

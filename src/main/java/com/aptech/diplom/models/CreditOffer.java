@@ -101,6 +101,20 @@ public class CreditOffer {
     }
 
     public void setPaymentSchedule(List<CreditPayment> paymentSchedule) {
+        for (CreditPayment payment : paymentSchedule) {
+            payment.setCreditOffer(this);
+        }
         this.paymentSchedule = paymentSchedule;
+    }
+
+    @Override
+    public String toString() {
+        return "CreditOffer{" +
+                "creditAmount=" + creditAmount +
+                ", customer=" + customer +
+                ", credit=" + credit +
+                ", bank=" + bank +
+                ", paymentSchedule=" + paymentSchedule +
+                '}';
     }
 }

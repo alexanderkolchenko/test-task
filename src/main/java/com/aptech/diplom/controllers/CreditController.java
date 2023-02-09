@@ -61,7 +61,6 @@ public class CreditController {
                                @RequestParam int creditLimit,
                                @RequestParam float interestRate,
                                Model model) {
-        //todo try to redirect on save page
         Credit credit = creditService.getCredit(id);
         creditService.updateCredit(credit, interestRate, creditLimit);
         return "redirect:/credits";

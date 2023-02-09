@@ -47,7 +47,7 @@
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             th:data-bs-target="'#i' + ${banks.indexOf(bank)}" aria-expanded="false"
                                             th:aria-controls="'i' + ${banks.indexOf(bank)}"
-                                            th:text="${bank.nameOfBank}">
+                                            th:text="${bank.name}">
                                     </button>
                                 </h2>
                                 <div th:id="'i' + ${banks.indexOf(bank)}" class="accordion-collapse collapse"
